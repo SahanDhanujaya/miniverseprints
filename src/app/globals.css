@@ -1,0 +1,250 @@
+@import "tailwindcss";
+
+:root {
+  --background: #100b08;
+  --background-secondary: #1b120c;
+  --background-card: #24170f;
+  --background-hover: #342216;
+  --foreground: #fff7ec;
+  --foreground-muted: #cdb79e;
+  --accent: #8f5524;
+  --accent-hover: #a96b31;
+  --accent-light: #f6d7ad;
+  --border: #49301f;
+  --border-light: #634228;
+  --success: #22C55E;
+  --warning: #d8963d;
+  --error: #e05243;
+  --info: #4f8ea8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-card: var(--background-card);
+  --color-background-hover: var(--background-hover);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-light: var(--accent-light);
+  --color-border: var(--border);
+  --color-border-light: var(--border-light);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-light) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--border-light);
+  border-radius: 3px;
+}
+
+body {
+  background:
+    radial-gradient(circle at 85% 8%, rgba(190, 137, 82, 0.18), transparent 28rem),
+    radial-gradient(circle at 12% 0%, rgba(111, 64, 29, 0.22), transparent 24rem),
+    linear-gradient(180deg, #17100b 0%, var(--background) 42%, #0b0705 100%);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+::selection {
+  background-color: var(--accent);
+  color: var(--foreground);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px var(--background-card) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(143, 85, 36, 0.42); }
+  50% { box-shadow: 0 0 0 8px rgba(143, 85, 36, 0); }
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-140%) skewX(-16deg); }
+  to { transform: translateX(140%) skewX(-16deg); }
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(34px) scale(0.98);
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes ambientSweep {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.32; }
+  50% { transform: translate3d(-18px, 14px, 0) rotate(2deg); opacity: 0.52; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 1s ease-out;
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
+  border-radius: 999px;
+  bottom: -0.45rem;
+  content: "";
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  transition: transform 220ms ease;
+  width: 120%;
+}
+
+.nav-link:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.hero-ambient::before {
+  animation: ambientSweep 9s ease-in-out infinite;
+  background:
+    radial-gradient(circle at 25% 30%, rgba(246, 215, 173, 0.16), transparent 16rem),
+    radial-gradient(circle at 70% 55%, rgba(169, 107, 49, 0.22), transparent 20rem);
+  content: "";
+  inset: -20%;
+  pointer-events: none;
+  position: absolute;
+}
+
+.reveal-on-scroll {
+  animation: revealUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@supports (animation-timeline: view()) {
+  .reveal-on-scroll {
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+}
+
+.product-card {
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.16);
+  transform: translateZ(0);
+}
+
+.product-card::after,
+.category-tile::after,
+.hover-lift::after {
+  background: linear-gradient(135deg, rgba(246, 215, 173, 0.26), transparent 42%, rgba(169, 107, 49, 0.20));
+  content: "";
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 280ms ease;
+}
+
+.product-card:hover {
+  border-color: color-mix(in srgb, var(--accent-light) 54%, transparent);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.34), 0 0 28px rgba(169, 107, 49, 0.18);
+  transform: translateY(-8px) rotateX(1deg);
+}
+
+.product-card:hover::after,
+.category-tile:hover::after,
+.hover-lift:hover::after {
+  opacity: 1;
+}
+
+.category-tile,
+.hover-lift {
+  overflow: hidden;
+  position: relative;
+}
+
+.category-tile:hover,
+.hover-lift:hover {
+  border-color: color-mix(in srgb, var(--accent-light) 48%, transparent);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+  transform: translateY(-6px);
+}
+
+.category-tile:hover svg,
+.step-card:hover svg {
+  filter: drop-shadow(0 0 12px rgba(246, 215, 173, 0.36));
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.step-card:hover > div:first-child {
+  background: rgba(143, 85, 36, 0.18);
+  transform: translateY(-5px);
+}
+
+.magnetic-button {
+  box-shadow: 0 8px 22px rgba(143, 85, 36, 0.18);
+}
+
+.magnetic-button:hover {
+  box-shadow: 0 14px 34px rgba(143, 85, 36, 0.30);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}

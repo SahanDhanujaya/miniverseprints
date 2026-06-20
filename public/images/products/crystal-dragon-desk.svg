@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Crystal Dragon Desk Decoration</title>
+  <desc id="desc">Original crystal dragon desk decoration product image.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="36%" r="72%"><stop offset="0" stop-color="#173a46"/><stop offset=".62" stop-color="#101010"/><stop offset="1" stop-color="#050505"/></radialGradient>
+    <linearGradient id="crystal" x1="0" x2="1"><stop offset="0" stop-color="#96fff4"/><stop offset="1" stop-color="#2e7df4"/></linearGradient>
+  </defs>
+  <rect width="900" height="900" fill="url(#bg)"/>
+  <ellipse cx="450" cy="746" rx="255" ry="50" fill="#000" opacity=".62"/>
+  <path d="M210 696h480l-42 86H252l-42-86Z" fill="#202020" stroke="#55e8ff" stroke-width="6"/>
+  <path d="M257 581c91-134 229-197 389-186-90 55-140 122-148 200 58-50 102-65 153-46-44 79-115 126-212 142-73 12-133-12-182-110Z" fill="url(#crystal)" stroke="#d9fffb" stroke-width="8"/>
+  <path d="M512 242c74 10 115 55 123 136l-94 19-67-69 38-86Z" fill="#2e7df4" stroke="#d9fffb" stroke-width="7"/>
+  <path d="M585 294 721 228l-68 129Z" fill="#96fff4" stroke="#d9fffb" stroke-width="7"/>
+  <path d="M475 329 342 241l34 167Z" fill="#55e8ff" stroke="#d9fffb" stroke-width="7"/>
+  <path d="M356 493c80 31 151 31 213 0M305 587c89 54 188 64 294 31" fill="none" stroke="#06333c" stroke-width="10" opacity=".5"/>
+  <circle cx="584" cy="339" r="14" fill="#081218"/>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Shadow Ninja Figure</title>
+  <desc id="desc">Original shadow ninja 3D printed figure with red accent lighting.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="30%" r="70%"><stop offset="0" stop-color="#222"/><stop offset=".65" stop-color="#0f0f10"/><stop offset="1" stop-color="#050505"/></radialGradient>
+    <linearGradient id="suit" x1="0" x2="1"><stop offset="0" stop-color="#2b2b32"/><stop offset="1" stop-color="#08080b"/></linearGradient>
+  </defs>
+  <rect width="900" height="900" fill="url(#bg)"/>
+  <ellipse cx="450" cy="735" rx="230" ry="45" fill="#000" opacity=".65"/>
+  <ellipse cx="450" cy="705" rx="190" ry="44" fill="#262626" stroke="#e91e4d" stroke-width="6"/>
+  <path d="M450 143c-62 0-109 45-109 103 0 31 14 59 38 78l-51 144-96 53 27 62 106-40 39 171h93l38-171 106 40 27-62-96-53-51-144c24-19 38-47 38-78 0-58-47-103-109-103Z" fill="url(#suit)" stroke="#777" stroke-width="6"/>
+  <path d="M346 236c64-31 139-31 208 0v55H346v-55Z" fill="#111"/>
+  <path d="M379 267h142" stroke="#f0194b" stroke-width="18" stroke-linecap="round"/>
+  <path d="M414 265h72" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M382 374h136l34 118-102 72-102-72 34-118Z" fill="#151519" stroke="#e91e4d" stroke-width="6"/>
+  <path d="m317 476-126-92M583 476l126-92" stroke="#555" stroke-width="24" stroke-linecap="round"/>
+  <path d="m177 364 76 17M723 364l-76 17" stroke="#e91e4d" stroke-width="10" stroke-linecap="round"/>
+  <path d="M400 710 323 797M500 710l77 87" stroke="#151519" stroke-width="44" stroke-linecap="round"/>
+  <path d="M260 643c89-70 289-70 380 0" fill="none" stroke="#e91e4d" stroke-width="5" opacity=".45"/>
+</svg>

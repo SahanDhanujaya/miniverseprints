@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Pirate Captain Bust</title>
+  <desc id="desc">Original pirate captain bust collectible on a dark display base.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="34%" r="70%"><stop offset="0" stop-color="#3b2620"/><stop offset=".65" stop-color="#151313"/><stop offset="1" stop-color="#050505"/></radialGradient>
+    <linearGradient id="coat" x1="0" x2="1"><stop offset="0" stop-color="#6d1826"/><stop offset="1" stop-color="#2c0d14"/></linearGradient>
+  </defs>
+  <rect width="900" height="900" fill="url(#bg)"/>
+  <ellipse cx="450" cy="745" rx="245" ry="50" fill="#000" opacity=".6"/>
+  <path d="M285 702h330l55 98H230l55-98Z" fill="#2b2b2b" stroke="#d81b45" stroke-width="6"/>
+  <path d="M319 487c16-88 74-142 131-142s115 54 131 142l58 215H261l58-215Z" fill="url(#coat)" stroke="#b88755" stroke-width="8"/>
+  <path d="M333 270c52-87 182-92 234 0l100 28-39 48H272l-39-48 100-28Z" fill="#171717" stroke="#c99b64" stroke-width="9"/>
+  <path d="M335 330c27-72 203-72 230 0" fill="#261414" stroke="#d81b45" stroke-width="8"/>
+  <path d="M362 347c9-65 167-65 176 0l-15 111c-10 61-136 61-146 0l-15-111Z" fill="#b88755" stroke="#f2c18c" stroke-width="7"/>
+  <path d="M386 397h45M480 397h45" stroke="#151515" stroke-width="11" stroke-linecap="round"/>
+  <path d="M441 430c8 10 10 10 18 0M407 477c34 22 52 22 86 0" fill="none" stroke="#3a1711" stroke-width="9" stroke-linecap="round"/>
+  <path d="M523 363c43 36 35 111-8 142" fill="none" stroke="#d81b45" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="511" cy="396" r="21" fill="#111" stroke="#d8c49a" stroke-width="6"/>
+  <path d="M362 554h176l40 148H322l40-148Z" fill="#1d1d1d" stroke="#c99b64" stroke-width="6"/>
+</svg>

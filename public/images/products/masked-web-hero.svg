@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Masked Web Hero Figure</title>
+  <desc id="desc">Original masked web-slinger inspired superhero figure, copyright-safe.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="70%"><stop offset="0" stop-color="#132a4a"/><stop offset=".58" stop-color="#111"/><stop offset="1" stop-color="#050505"/></radialGradient>
+    <linearGradient id="suit" x1="0" x2="1"><stop offset="0" stop-color="#e91e4d"/><stop offset="1" stop-color="#123b83"/></linearGradient>
+  </defs>
+  <rect width="900" height="900" fill="url(#bg)"/>
+  <ellipse cx="450" cy="752" rx="245" ry="48" fill="#000" opacity=".62"/>
+  <ellipse cx="450" cy="722" rx="200" ry="43" fill="#202020" stroke="#e91e4d" stroke-width="6"/>
+  <path d="M450 156c-66 0-118 48-118 108 0 34 17 65 45 85l-55 157-124 78 30 59 124-54 50 129h96l50-129 124 54 30-59-124-78-55-157c28-20 45-51 45-85 0-60-52-108-118-108Z" fill="url(#suit)" stroke="#8bb8ff" stroke-width="7"/>
+  <path d="M366 245c33-55 135-55 168 0v76c-38 29-130 29-168 0v-76Z" fill="#e91e4d"/>
+  <path d="M389 271c25-25 47-25 66 8-35 21-55 18-66-8ZM511 271c-25-25-47-25-66 8 35 21 55 18 66-8Z" fill="#fff"/>
+  <path d="M450 191v154M381 224c44 24 94 24 138 0M370 291c52 22 108 22 160 0" stroke="#1b1b24" stroke-width="5" opacity=".55"/>
+  <path d="M386 380h128l38 129-102 66-102-66 38-129Z" fill="#142e66" stroke="#e91e4d" stroke-width="7"/>
+  <path d="M450 382v190M387 439h126M367 506h166" stroke="#8bb8ff" stroke-width="5" opacity=".65"/>
+  <path d="M204 584c102-92 194-104 276-36M696 584c-102-92-194-104-276-36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+</svg>

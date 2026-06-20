@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Mystic Sorceress Figure</title>
+  <desc id="desc">Original fantasy sorceress figure with magical effect base.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="36%" r="72%"><stop offset="0" stop-color="#34204f"/><stop offset=".62" stop-color="#111"/><stop offset="1" stop-color="#050505"/></radialGradient>
+    <linearGradient id="robe" x1="0" x2="1"><stop offset="0" stop-color="#812ef0"/><stop offset="1" stop-color="#2a124f"/></linearGradient>
+  </defs>
+  <rect width="900" height="900" fill="url(#bg)"/>
+  <ellipse cx="450" cy="746" rx="240" ry="48" fill="#000" opacity=".62"/>
+  <ellipse cx="450" cy="716" rx="195" ry="43" fill="#202020" stroke="#d446ff" stroke-width="6"/>
+  <path d="M450 150c-56 0-101 43-101 97 0 28 12 53 32 71l-88 384h314l-88-384c20-18 32-43 32-71 0-54-45-97-101-97Z" fill="url(#robe)" stroke="#d8b4ff" stroke-width="7"/>
+  <path d="M352 229c42-91 154-91 196 0l-46 31H398l-46-31Z" fill="#1c1724" stroke="#d446ff" stroke-width="7"/>
+  <circle cx="415" cy="273" r="13" fill="#fff"/><circle cx="485" cy="273" r="13" fill="#fff"/>
+  <path d="M409 327c28 18 54 18 82 0" fill="none" stroke="#f0caa7" stroke-width="9" stroke-linecap="round"/>
+  <path d="M378 391h144l47 198H331l47-198Z" fill="#21142f" stroke="#d446ff" stroke-width="7"/>
+  <path d="M634 238v358" stroke="#29191c" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="634" cy="221" r="49" fill="none" stroke="#ff2f69" stroke-width="12"/>
+  <path d="M266 615c78-71 160-93 246-64M630 632c-76-55-150-65-222-29" fill="none" stroke="#d446ff" stroke-width="13" stroke-linecap="round" opacity=".75"/>
+  <path d="M394 706 358 803M506 706l36 97" stroke="#2a124f" stroke-width="46" stroke-linecap="round"/>
+</svg>

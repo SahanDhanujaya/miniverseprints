@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Hero Academy Figure</title>
+  <desc id="desc">Original young hero figure with energy effect base.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="36%" r="68%"><stop offset="0" stop-color="#17383f"/><stop offset=".6" stop-color="#111"/><stop offset="1" stop-color="#050505"/></radialGradient>
+    <linearGradient id="suit" x1="0" x2="1"><stop offset="0" stop-color="#13b6a0"/><stop offset="1" stop-color="#0b4c58"/></linearGradient>
+  </defs>
+  <rect width="900" height="900" fill="url(#bg)"/>
+  <ellipse cx="450" cy="730" rx="230" ry="48" fill="#000" opacity=".6"/>
+  <ellipse cx="450" cy="700" rx="190" ry="43" fill="#202020" stroke="#00d6b7" stroke-width="6"/>
+  <path d="M450 145c-61 0-111 49-111 110 0 33 15 63 38 84l-45 160-86 74 42 52 79-57 40 146h86l40-146 79 57 42-52-86-74-45-160c23-21 38-51 38-84 0-61-50-110-111-110Z" fill="url(#suit)" stroke="#bffdf4" stroke-width="7"/>
+  <path d="M372 252c45-40 111-40 156 0v66H372v-66Z" fill="#171717"/>
+  <circle cx="409" cy="273" r="14" fill="#fff"/><circle cx="491" cy="273" r="14" fill="#fff"/>
+  <path d="M385 385h130l34 125-99 67-99-67 34-125Z" fill="#101316" stroke="#00d6b7" stroke-width="7"/>
+  <path d="m450 406-45 85h53l-27 83 70-108h-54l28-60h-25Z" fill="#f4ff69"/>
+  <path d="M279 649c60-72 133-92 220-68M620 637c-60-72-126-87-205-63" fill="none" stroke="#00d6b7" stroke-width="16" stroke-linecap="round" opacity=".8"/>
+  <path d="M395 710 350 802M505 710l45 92" stroke="#0b4c58" stroke-width="46" stroke-linecap="round"/>
+</svg>

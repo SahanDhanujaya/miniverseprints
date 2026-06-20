@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Red Titan Figure</title>
+  <desc id="desc">Original red armored 3D printed collectible figure on a dark catalog background.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="70%"><stop offset="0" stop-color="#3a1018"/><stop offset="0.55" stop-color="#171717"/><stop offset="1" stop-color="#080808"/></radialGradient>
+    <linearGradient id="red" x1="0" x2="1"><stop offset="0" stop-color="#ff315f"/><stop offset="1" stop-color="#8f1028"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="900" height="900" fill="url(#bg)"/>
+  <ellipse cx="450" cy="744" rx="245" ry="48" fill="#000" opacity=".55"/>
+  <ellipse cx="450" cy="714" rx="210" ry="48" fill="#2b2b2b" stroke="#f01846" stroke-width="6"/>
+  <path d="M450 130c-72 0-126 48-126 115 0 44 24 80 63 100l-48 168-78 82 42 50 80-68 32 140h70l30-141 82 69 42-50-79-83-47-167c39-20 63-56 63-100 0-67-54-115-126-115Z" fill="url(#red)" stroke="#ff6f8b" stroke-width="8"/>
+  <path d="M379 244h142l-27 78h-88l-27-78Z" fill="#141414" opacity=".78"/>
+  <circle cx="405" cy="231" r="18" fill="#ffd3dc"/><circle cx="495" cy="231" r="18" fill="#ffd3dc"/>
+  <path d="M394 387h112l36 130-92 51-92-51 36-130Z" fill="#222" stroke="#ff315f" stroke-width="7"/>
+  <path d="M450 390v175M389 463h122" stroke="#ff315f" stroke-width="10" opacity=".8"/>
+  <path d="M322 514 215 618M578 514l107 104" stroke="#c6173b" stroke-width="36" stroke-linecap="round"/>
+  <path d="M398 716 368 811M502 716l30 95" stroke="#c6173b" stroke-width="48" stroke-linecap="round"/>
+  <path d="M275 780c120 44 230 44 350 0" fill="none" stroke="#ffffff" opacity=".08" stroke-width="8"/>
+  <circle cx="450" cy="410" r="260" fill="none" stroke="#f01846" stroke-width="4" opacity=".35" filter="url(#glow)"/>
+</svg>

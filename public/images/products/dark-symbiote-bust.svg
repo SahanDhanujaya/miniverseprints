@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Dark Symbiote Bust</title>
+  <desc id="desc">Original dark alien creature bust collectible with red lighting.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="32%" r="72%"><stop offset="0" stop-color="#2b0f19"/><stop offset=".62" stop-color="#111"/><stop offset="1" stop-color="#040404"/></radialGradient>
+    <linearGradient id="skin" x1="0" x2="1"><stop offset="0" stop-color="#303036"/><stop offset="1" stop-color="#050506"/></linearGradient>
+  </defs>
+  <rect width="900" height="900" fill="url(#bg)"/>
+  <ellipse cx="450" cy="746" rx="245" ry="48" fill="#000" opacity=".65"/>
+  <path d="M275 690h350l52 110H223l52-110Z" fill="#202020" stroke="#e91e4d" stroke-width="7"/>
+  <path d="M450 119c-96 0-160 82-160 180 0 67 34 128 84 161l-66 230h284l-66-230c50-33 84-94 84-161 0-98-64-180-160-180Z" fill="url(#skin)" stroke="#606068" stroke-width="8"/>
+  <path d="M337 283c49-38 80-40 113 20 33-60 64-58 113-20-7 72-42 128-113 128s-106-56-113-128Z" fill="#f5f5f5"/>
+  <path d="M371 481c52 37 106 37 158 0-16 66-142 66-158 0Z" fill="#e91e4d"/>
+  <path d="M388 490h124M403 518h94" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+  <path d="M305 418c-99 20-144 78-136 158M595 418c99 20 144 78 136 158M336 527c-105 35-155 91-151 168M564 527c105 35 155 91 151 168" fill="none" stroke="#222228" stroke-width="28" stroke-linecap="round"/>
+  <path d="M305 418c-99 20-144 78-136 158M595 418c99 20 144 78 136 158" fill="none" stroke="#e91e4d" stroke-width="7" stroke-linecap="round" opacity=".65"/>
+</svg>

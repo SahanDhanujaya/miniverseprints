@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Pixel Sword Keychain Mini</title>
+  <desc id="desc">Original pixel sword keychain mini product image.</desc>
+  <rect width="900" height="900" fill="#080808"/>
+  <ellipse cx="450" cy="744" rx="240" ry="48" fill="#000" opacity=".65"/>
+  <ellipse cx="450" cy="714" rx="195" ry="43" fill="#202020" stroke="#e91e4d" stroke-width="6"/>
+  <rect x="418" y="128" width="64" height="326" fill="#dff7ff"/>
+  <rect x="354" y="192" width="64" height="198" fill="#9ee9ff"/>
+  <rect x="482" y="192" width="64" height="198" fill="#8fd8ff"/>
+  <rect x="386" y="454" width="128" height="64" fill="#e91e4d"/>
+  <rect x="322" y="518" width="256" height="64" fill="#94122d"/>
+  <rect x="418" y="582" width="64" height="139" fill="#2a2a2a"/>
+  <rect x="386" y="721" width="128" height="64" fill="#171717"/>
+  <circle cx="450" cy="128" r="58" fill="none" stroke="#e91e4d" stroke-width="20"/>
+  <path d="M585 258h112M641 202v112" stroke="#ffffff" stroke-width="14" stroke-linecap="round" opacity=".25"/>
+  <path d="M195 512h92M241 466v92" stroke="#e91e4d" stroke-width="13" stroke-linecap="round" opacity=".55"/>
+</svg>
