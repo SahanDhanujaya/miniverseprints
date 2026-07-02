@@ -9,6 +9,7 @@ import Badge from '@/components/ui/Badge';
 import StarRating from '@/components/ui/StarRating';
 import Button from '@/components/ui/Button';
 import ProductGrid from '@/components/product/ProductGrid';
+import ProductVariations from '@/components/product/ProductVariations';
 import { Product } from '@/types';
 import { getProductEnquiryLink, formatPrice } from '@/lib/utils';
 import { hasSupabaseConfig } from '@/lib/supabase/config';
@@ -79,6 +80,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const productImages = product.images?.length ? product.images : product.product_images || [];
   const mainImage = productImages.find((img) => img.is_main) || productImages[0];
 
+  const handleCart = () => {
+    
+  }
   return (
     <div className="max-w-7xl mx-auto px-4 pb-12">
       <Breadcrumb items={[
@@ -184,9 +188,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
           {/* Actions */}
           <div className="mt-6 space-y-3">
-            <Button size="lg" className="w-full" disabled={product.product_type === 'ready_stock' && product.stock_quantity <= 0}>
-              <ShoppingCart className="w-5 h-5" /> Add to Cart
-            </Button>
+            <ProductVariations
+              productId={product.id}
+              productName={product.name}
+              productSlug={product.slug}
+              regularPrice={product.regular_price}
+              salePrice={product.sale_price}
+              variations={product.variations || []}
+              productType={product.product_type}
+              stockQuantity={product.stock_quantity}
+            />
             <div className="flex gap-3">
               <a
                 href={getProductEnquiryLink(product.name, `${process.env.NEXT_PUBLIC_SITE_URL}/product/${product.slug}`)}

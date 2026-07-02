@@ -114,7 +114,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                   key={item.href}
                   href={item.href}
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-background-hover transition-colors"
-                  onClick={() => { const el = document.getElementById('admin-mobile-menu') as HTMLInputElement | null; if (el) el.checked = false; }}
+                  // onClick={() => { const el = document.getElementById('admin-mobile-menu') as HTMLInputElement | null; if (el) el.checked = false; }}
                 >
                   <item.icon className="w-5 h-5" />
                   {item.label}
