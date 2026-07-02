@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
-import { Heart, MessageCircle, Share2, ShoppingCart, Star, Truck, Shield, Clock } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Truck, Shield, Clock } from 'lucide-react';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import PriceDisplay from '@/components/ui/PriceDisplay';
 import Badge from '@/components/ui/Badge';
@@ -80,9 +79,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const productImages = product.images?.length ? product.images : product.product_images || [];
   const mainImage = productImages.find((img) => img.is_main) || productImages[0];
 
-  const handleCart = () => {
-    
-  }
   return (
     <div className="max-w-7xl mx-auto px-4 pb-12">
       <Breadcrumb items={[
@@ -94,7 +90,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Image Gallery */}
         <div className="space-y-4">
-          <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-background-card border border-border">
+          <div className="relative aspect-3/4 rounded-2xl overflow-hidden bg-background-card border border-border">
             {mainImage ? (
               <Image
                 src={mainImage.url}
@@ -116,7 +112,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           {productImages.length > 1 && (
             <div className="grid grid-cols-4 gap-2">
               {productImages.map((img) => (
-                <div key={img.id} className="relative aspect-[3/4] rounded-lg overflow-hidden bg-background-card border border-border cursor-pointer hover:border-accent transition-colors">
+                <div key={img.id} className="relative aspect-3/4 rounded-lg overflow-hidden bg-background-card border border-border cursor-pointer hover:border-accent transition-colors">
                   <Image src={img.url} alt={img.alt_text || ''} fill className="object-contain" sizes="100px" />
                 </div>
               ))}
@@ -194,7 +190,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               productSlug={product.slug}
               regularPrice={product.regular_price}
               salePrice={product.sale_price}
-              variations={product.variations || []}
+              variations={product.variations ?? []}
               productType={product.product_type}
               stockQuantity={product.stock_quantity}
             />

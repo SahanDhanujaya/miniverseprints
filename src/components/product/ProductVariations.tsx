@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { formatPrice, getEffectivePrice, getVariationPrice } from '@/lib/utils';
 import Button from '@/components/ui/Button';
-import { ShoppingCart, MessageCircle, Heart, Share2 } from 'lucide-react';
+import { ShoppingCart, MessageCircle, Heart } from 'lucide-react';
 import { addToCart } from '@/lib/actions/cart';
 import { toggleWishlist } from '@/lib/actions/wishlist';
 import { getProductEnquiryLink } from '@/lib/utils';
@@ -12,9 +12,9 @@ interface Variation {
   id: string;
   sku?: string | null;
   size?: string | null;
-  height?: number | null;
+  height?: string | null;
   colour?: string | null;
-  paint_type?: string | null;
+  paint_type?: 'painted' | 'unpainted' | null;
   material?: string | null;
   finish?: string | null;
   price_adjustment: number;
@@ -38,13 +38,11 @@ interface ProductVariationsProps {
 export default function ProductVariations({
   productId, productName, productSlug, regularPrice, salePrice, variations, productType, stockQuantity,
 }: ProductVariationsProps) {
-  const [selectedVariation, setSelectedVariation] = useState<Variation | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [wishlisted, setWishlisted] = useState(false);
 
   const basePrice = getEffectivePrice(regularPrice, salePrice);
-  const currentPrice = selectedVariation ? getVariationPrice(basePrice, selectedVariation.price_adjustment) : basePrice;
 
   // Get unique options for each attribute
   const sizes = [...new Set(variations.filter(v => v.size).map(v => v.size!))];
@@ -62,6 +60,8 @@ export default function ProductVariations({
     (!selectedPaint || v.paint_type === selectedPaint) &&
     v.is_active
   ) || null;
+
+  const currentPrice = matchingVariation ? getVariationPrice(basePrice, matchingVariation.price_adjustment) : basePrice;
 
   const handleAddToCart = async () => {
     const formData = new FormData();
@@ -92,11 +92,11 @@ export default function ProductVariations({
       {/* Price */}
       <div className="flex items-baseline gap-3">
         <span className="text-3xl font-bold">{formatPrice(currentPrice)}</span>
-        {salePrice && salePrice < regularPrice && !selectedVariation && (
+        {salePrice && salePrice < regularPrice && !matchingVariation && (
           <span className="text-lg text-foreground-muted line-through">{formatPrice(regularPrice)}</span>
         )}
-        {selectedVariation && salePrice && salePrice < regularPrice && (
-          <span className="text-lg text-foreground-muted line-through">{formatPrice(regularPrice + selectedVariation.price_adjustment)}</span>
+        {matchingVariation && salePrice && salePrice < regularPrice && (
+          <span className="text-lg text-foreground-muted line-through">{formatPrice(regularPrice + matchingVariation.price_adjustment)}</span>
         )}
       </div>
 
