@@ -4,6 +4,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://miniverseprints.lk
 
 export default function robots(): MetadataRoute.Robots {
   return {
+    host: SITE_URL,
     rules: [
       {
         userAgent: '*',

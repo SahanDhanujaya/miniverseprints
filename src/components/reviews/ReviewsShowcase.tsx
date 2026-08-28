@@ -62,7 +62,7 @@ export default function ReviewsShowcase({ reviews, compact = false }: ReviewsSho
               )}
             </div>
             <h3 className="font-semibold mb-2">{review.title}</h3>
-            <p className="text-foreground-muted mb-5 leading-relaxed">"{review.body}"</p>
+            <p className="text-foreground-muted mb-5 leading-relaxed">&ldquo;{review.body}&rdquo;</p>
             {review.adminReply && (
               <div className="mb-5 rounded-xl border border-accent/20 bg-accent/5 p-3 text-sm">
                 <span className="text-accent-light font-medium">MiniVersePrints reply:</span> {review.adminReply}

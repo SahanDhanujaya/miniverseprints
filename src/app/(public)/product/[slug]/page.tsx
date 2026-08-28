@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Heart, MessageCircle, Share2, Truck, Shield, Clock } from 'lucide-react';
@@ -13,6 +14,8 @@ import { Product } from '@/types';
 import { getProductEnquiryLink, formatPrice } from '@/lib/utils';
 import { hasSupabaseConfig } from '@/lib/supabase/config';
 import { demoProducts } from '@/lib/demo-store';
+import JsonLd from '@/components/seo/JsonLd';
+import { buildProductSchema } from '@/lib/seo';
 
 async function getProduct(slug: string) {
   if (!hasSupabaseConfig()) {
@@ -59,15 +62,46 @@ async function getProduct(slug: string) {
   };
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://miniverseprints.lk';
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const data = await getProduct(slug);
-  if (!data) return { title: 'Product Not Found' };
+  if (!data) return { title: 'Product Not Found' } as Metadata;
 
-  return {
-    title: data.product.seo_title || data.product.name,
-    description: data.product.seo_description || data.product.short_description || `Buy ${data.product.name} at MiniVersePrints`,
+  const { product } = data;
+  const productImages = product.images?.length ? product.images : product.product_images || [];
+  const mainImage = productImages.find((img: any) => img.is_main) || productImages[0];
+  let imageUrl: string | undefined = mainImage?.url;
+  if (imageUrl && imageUrl.startsWith('/')) imageUrl = `${SITE_URL}${imageUrl}`;
+
+  const title = product.seo_title || product.name;
+  const description = product.seo_description || product.short_description || `Buy ${product.name} at MiniVersePrints`;
+  const url = `${SITE_URL}/product/${product.slug}`;
+
+  const metadata: Metadata = {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'website',
+      siteName: 'MiniVersePrints',
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+    alternates: {
+      canonical: url,
+    },
   };
+
+  return metadata;
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -79,8 +113,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const productImages = product.images?.length ? product.images : product.product_images || [];
   const mainImage = productImages.find((img) => img.is_main) || productImages[0];
 
+  const productSchema = buildProductSchema(product, reviews || []);
+
   return (
     <div className="max-w-7xl mx-auto px-4 pb-12">
+        {/* Product structured data */}
+        <JsonLd data={productSchema} />
       <Breadcrumb items={[
         { label: 'Shop', href: '/shop' },
         { label: product.name },
