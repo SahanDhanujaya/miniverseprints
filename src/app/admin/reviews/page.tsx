@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { formatDateTime } from '@/lib/utils';
 import ReviewActions from './ReviewActions';
+import { ReactGoogleReview, ReactGoogleReviews } from 'react-google-reviews';
 
 export const metadata = { title: 'Reviews - Admin' };
 
@@ -14,7 +15,7 @@ export default async function AdminReviewsPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Reviews</h1>
-      <div className="space-y-4">
+      {/* <div className="space-y-4">
         {(reviews || []).map((review: any) => (
           <div key={review.id} className="bg-background-card rounded-2xl border border-border p-4">
             <div className="flex items-start justify-between">
@@ -45,7 +46,8 @@ export default async function AdminReviewsPage() {
           </div>
         ))}
         {(!reviews || reviews.length === 0) && <div className="text-center py-12 text-foreground-muted">No reviews yet</div>}
-      </div>
+      </div> */}
+      
     </div>
   );
 }

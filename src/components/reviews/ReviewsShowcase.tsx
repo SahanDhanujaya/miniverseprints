@@ -1,33 +1,52 @@
-import Link from 'next/link';
-import { CheckCircle2, ExternalLink, Star } from 'lucide-react';
-import type { PublicReview } from '@/lib/reviews-data';
-import Button from '@/components/ui/Button';
-import { GOOGLE_REVIEWS_LINK } from '@/lib/constants';
+'use client';
+import Link from "next/link";
+import { CheckCircle2, ExternalLink, Star } from "lucide-react";
+import type { PublicReview } from "@/lib/reviews-data";
+import Button from "@/components/ui/Button";
+import { GOOGLE_REVIEWS_LINK } from "@/lib/constants";
+import Reviews from "./FeaturableReview";
 
 type ReviewsShowcaseProps = {
   reviews: PublicReview[];
   compact?: boolean;
 };
 
-export default function ReviewsShowcase({ reviews, compact = false }: ReviewsShowcaseProps) {
+export default function ReviewsShowcase({
+  reviews,
+  compact = false,
+}: ReviewsShowcaseProps) {
   return (
-    <section className={compact ? 'reveal-on-scroll max-w-7xl mx-auto px-4 py-14' : 'max-w-7xl mx-auto px-4 py-12'}>
+    <section
+      className={
+        compact
+          ? "reveal-on-scroll max-w-7xl mx-auto px-4 py-14"
+          : "max-w-7xl mx-auto px-4 py-12"
+      }
+    >
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-7">
         <div>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-sm font-medium mb-4">
             <Star className="w-4 h-4 fill-current" />
             Customer reviews
           </div>
-          <h2 className={compact ? 'text-2xl font-bold' : 'text-4xl md:text-5xl font-bold'}>
+          <h2
+            className={
+              compact ? "text-2xl font-bold" : "text-4xl md:text-5xl font-bold"
+            }
+          >
             Loved By Local Collectors
           </h2>
           <p className="text-foreground-muted mt-3 max-w-2xl">
-            Real feedback for MiniVersePrints figures, gifts, desk pieces, and custom 3D-printed orders.
+            Real feedback for MiniVersePrints figures, gifts, desk pieces, and
+            custom 3D-printed orders.
           </p>
         </div>
         {compact && (
           <div className="flex flex-wrap items-center gap-4">
-            <Link href="/reviews" className="text-accent hover:underline text-sm font-medium">
+            <Link
+              href="/reviews"
+              className="text-accent hover:underline text-sm font-medium"
+            >
               View all reviews
             </Link>
             <a
@@ -42,7 +61,7 @@ export default function ReviewsShowcase({ reviews, compact = false }: ReviewsSho
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {reviews.map((review) => (
           <article key={review.id} className="reveal-on-scroll hover-lift bg-background-card border border-border rounded-2xl p-6">
             <div className="flex items-center justify-between gap-3 mb-4">
@@ -80,20 +99,30 @@ export default function ReviewsShowcase({ reviews, compact = false }: ReviewsSho
             </div>
           </article>
         ))}
-      </div>
+      </div> */}
+      <Reviews />
 
       {!compact && (
         <div className="reveal-on-scroll mt-10 bg-background-secondary border border-border rounded-2xl px-6 py-8 text-center hover-lift">
           <h2 className="text-2xl font-bold mb-2">Ready To Make Yours?</h2>
-          <p className="text-foreground-muted mb-6">Choose a product or send your custom reference through the order form.</p>
+          <p className="text-foreground-muted mb-6">
+            Choose a product or send your custom reference through the order
+            form.
+          </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link href="/shop">
               <Button className="magnetic-button">Browse Products</Button>
             </Link>
             <Link href="/custom-order">
-              <Button variant="outline" className="magnetic-button">Custom Order</Button>
+              <Button variant="outline" className="magnetic-button">
+                Custom Order
+              </Button>
             </Link>
-            <a href={GOOGLE_REVIEWS_LINK} target="_blank" rel="noopener noreferrer">
+            <a
+              href={GOOGLE_REVIEWS_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Button variant="outline" className="magnetic-button">
                 Google Reviews <ExternalLink className="w-4 h-4" />
               </Button>
