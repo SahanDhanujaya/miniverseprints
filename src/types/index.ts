@@ -374,3 +374,20 @@ export interface BankDetail {
   is_active: boolean;
   created_at: string;
 }
+
+export interface GalleryItem {
+  id: string;
+  title: string;
+  category: string;
+  image_url: string;
+  description: string | null;
+  tags?: string[];
+  sort_order: number;
+  is_featured: boolean;
+  is_active: boolean;
+  dimensions?: string | null;
+  material?: string | null;
+  created_at: string;
+  updated_at?: string;
+}
+

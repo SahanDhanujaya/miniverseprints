@@ -1,116 +1,169 @@
 import Link from 'next/link';
-import { Package, Camera, Globe, Mail, Phone, MapPin } from 'lucide-react';
-import { WHATSAPP_LINK } from '@/lib/constants';
+import Image from 'next/image';
+import { Camera, Globe, Mail, Phone, MapPin, Sparkles, MessageCircle } from 'lucide-react';
+import { WHATSAPP_LINK, WHATSAPP_NUMBER } from '@/lib/constants';
 
 export default function Footer() {
   return (
-    <footer className="bg-background-secondary border-t border-border mt-auto">
-      <div className="max-w-7xl mx-auto px-4 py-12">
+    <footer className="bg-[#221811] text-[#FAF7F2] border-t border-[#38281E] mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
-          <div>
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <Package className="w-6 h-6 text-accent" />
-              <span className="text-lg font-bold">
-                Mini<span className="text-accent">Verse</span>Prints
+          <div className="space-y-4">
+            <Link href="/" className="flex items-center gap-3">
+              <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-white p-0.5 shadow-sm border border-white/30 flex-shrink-0">
+                <Image
+                  src="/images/logo.png"
+                  alt="MiniVersePrints Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <span className="font-serif text-lg font-bold text-white">
+                Mini<span className="text-[#F59E0B]">Verse</span>Prints
               </span>
             </Link>
-            <p className="text-sm text-foreground-muted mb-4">
-              Premium 3D-printed figures, busts, miniatures, and collectibles from Sri Lanka.
+            <p className="text-xs text-[#C2B4A3] leading-relaxed">
+              Sri Lanka&apos;s premier custom 3D printing studio specializing in handcrafted anime figures, busts, miniatures, personalized gifts, and gaming desk setups.
             </p>
-            <div className="flex gap-3">
-              <a href="https://instagram.com/miniverseprints" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-background-hover text-foreground-muted hover:text-accent transition-colors">
-                <Camera className="w-5 h-5" />
+            <div className="flex gap-2.5">
+              <a
+                href="https://instagram.com/miniverseprints"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-xl bg-[#2D2017] border border-[#3E2E22] text-[#D6C7B7] hover:text-white transition-colors"
+                aria-label="Instagram"
+              >
+                <Camera className="w-4 h-4" />
               </a>
-              <a href="https://facebook.com/miniverseprints" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-background-hover text-foreground-muted hover:text-accent transition-colors">
-                <Globe className="w-5 h-5" />
+              <a
+                href="https://facebook.com/miniverseprints"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-xl bg-[#2D2017] border border-[#3E2E22] text-[#D6C7B7] hover:text-white transition-colors"
+                aria-label="Facebook"
+              >
+                <Globe className="w-4 h-4" />
               </a>
-              <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-background-hover text-foreground-muted hover:text-accent transition-colors">
-                <Phone className="w-5 h-5" />
+              <a
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-xl bg-green-950/60 border border-green-700/40 text-green-400 hover:bg-green-600 hover:text-white transition-colors"
+                aria-label="WhatsApp"
+              >
+                <MessageCircle className="w-4 h-4" />
               </a>
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Explore */}
           <div>
-            <h3 className="font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2.5">
-              {[
-                { href: '/shop', label: 'Shop All' },
-                { href: '/shop/category/action-figures', label: 'Action Figures' },
-                { href: '/shop/category/minifigures', label: 'Minifigures' },
-                { href: '/shop/category/valentine-gifts', label: 'Valentine Gifts' },
-                { href: '/custom-order', label: 'Custom Orders' },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-foreground-muted hover:text-foreground transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+            <h3 className="font-bold text-xs uppercase tracking-widest text-white mb-4">Explore</h3>
+            <ul className="space-y-2.5 text-xs text-[#C2B4A3]">
+              <li>
+                <Link href="/gallery" className="hover:text-white transition-colors">
+                  Work Gallery Portfolio
+                </Link>
+              </li>
+              <li>
+                <Link href="/custom-order" className="hover:text-white transition-colors flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3 text-[#F59E0B]" /> Custom 3D Order Request
+                </Link>
+              </li>
+              <li>
+                <Link href="/reviews" className="hover:text-white transition-colors">
+                  Customer Reviews
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-white transition-colors">
+                  About MiniVersePrints
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Categories */}
+          {/* Popular Categories */}
           <div>
-            <h3 className="font-semibold mb-4">Categories</h3>
-            <ul className="space-y-2.5">
-              {[
-                { href: '/shop/category/action-figures', label: 'Action Figures' },
-                { href: '/shop/category/minifigures', label: 'Minifigures' },
-                { href: '/shop/category/bust-figures', label: 'Bust Figures' },
-                { href: '/shop/category/valentine-gifts', label: 'Valentine Gifts' },
-                { href: '/shop/category/hotwheel-racks', label: 'Hotwheel Racks' },
-                { href: '/shop/category/keychains', label: 'Keychains' },
-                { href: '/shop/category/controller-holders', label: 'Controller Holders' },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-foreground-muted hover:text-foreground transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+            <h3 className="font-bold text-xs uppercase tracking-widest text-white mb-4">Gallery Categories</h3>
+            <ul className="space-y-2.5 text-xs text-[#C2B4A3]">
+              <li>
+                <Link href="/gallery" className="hover:text-white transition-colors">
+                  Action Figures & Statues
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-white transition-colors">
+                  Anime Bust Figures
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-white transition-colors">
+                  Chibi & Funko Minifigures
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-white transition-colors">
+                  Gaming Controller & Headset Stands
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-white transition-colors">
+                  Personalized Lithophane Lamps & Gifts
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Help & Info */}
+          {/* Help & Contact */}
           <div>
-            <h3 className="font-semibold mb-4">Help & Info</h3>
-            <ul className="space-y-2.5">
-              {[
-                { href: '/contact', label: 'Contact Us' },
-                { href: '/delivery', label: 'Delivery Information' },
-                { href: '/returns', label: 'Returns & Refunds' },
-                { href: '/faq', label: 'FAQ' },
-                { href: '/track-order', label: 'Track Order' },
-                { href: '/privacy', label: 'Privacy Policy' },
-                { href: '/terms', label: 'Terms & Conditions' },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-foreground-muted hover:text-foreground transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+            <h3 className="font-bold text-xs uppercase tracking-widest text-white mb-4">Contact & Support</h3>
+            <ul className="space-y-2.5 text-xs text-[#C2B4A3]">
+              <li>
+                <Link href="/contact" className="hover:text-white transition-colors">
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/delivery" className="hover:text-white transition-colors">
+                  Island-wide Delivery Info
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="hover:text-white transition-colors">
+                  Frequently Asked Questions
+                </Link>
+              </li>
+              <li>
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-400 hover:underline flex items-center gap-1.5 font-medium"
+                >
+                  <MessageCircle className="w-4 h-4" /> WhatsApp: {WHATSAPP_NUMBER}
+                </a>
+              </li>
             </ul>
           </div>
         </div>
 
-        {/* Contact Info */}
-        <div className="mt-8 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-6 text-sm text-foreground-muted">
-            <span className="flex items-center gap-2">
-              <Mail className="w-4 h-4" /> hello@miniverseprints.lk
+        {/* Bottom Bar */}
+        <div className="mt-10 pt-8 border-t border-[#38281E] flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#A89887]">
+          <div className="flex flex-wrap items-center gap-6">
+            <span className="flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 text-[#F59E0B]" /> {WHATSAPP_NUMBER}
             </span>
-            <span className="flex items-center gap-2">
-              <Phone className="w-4 h-4" /> +94 78 252 5156
+            <span className="flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-[#F59E0B]" /> hello@miniverseprints.lk
             </span>
-            <span className="flex items-center gap-2">
-              <MapPin className="w-4 h-4" /> Sri Lanka
+            <span className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#F59E0B]" /> Island-wide Delivery across Sri Lanka
             </span>
           </div>
-          <p className="text-sm text-foreground-muted">
-            &copy; {new Date().getFullYear()} MiniVersePrints. All rights reserved.
+          <p>
+            &copy; {new Date().getFullYear()} MiniVersePrints Sri Lanka. Handcrafted with passion.
           </p>
         </div>
       </div>

@@ -1,34 +1,31 @@
 import Breadcrumb from '@/components/ui/Breadcrumb';
-import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
-import Button from '@/components/ui/Button';
-export const metadata = { title: 'Custom Order', description: 'Request a custom 3D-printed figure' };
+import CustomOrderClient from '@/components/custom-order/CustomOrderClient';
+import { WHATSAPP_NUMBER } from '@/lib/constants';
+
+export const metadata = {
+  title: 'Custom 3D Print Order - MiniVersePrints Sri Lanka',
+  description: 'Order custom 3D-printed anime figures, busts, miniatures, cosplay props, lithophane lamps, and personalized gifts in Sri Lanka.',
+};
+
 export default function CustomOrderPage() {
   return (
-    <div className="max-w-2xl mx-auto px-4 pb-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-14 space-y-10 bg-[#EFE7DC]">
       <Breadcrumb items={[{ label: 'Custom Order' }]} />
-      <h1 className="text-3xl font-bold mb-2">Custom Order Request</h1>
-      <p className="text-foreground-muted mb-6">Tell us about your dream figure and we will make it happen!</p>
-      <form className="space-y-4 bg-background-card rounded-2xl border border-border p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input id="name" name="name" label="Your Name" required />
-          <Input id="email" name="email" type="email" label="Email" required />
+
+      <div className="text-center max-w-3xl mx-auto space-y-3">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#D5C5B5] bg-[#FAF6F0] text-[#A34E17] text-xs font-bold uppercase tracking-widest shadow-2xs">
+          ✨ Bespoke 3D Printing Service
         </div>
-        <Input id="whatsapp" name="whatsapp" type="tel" label="WhatsApp Number" placeholder="07X XXX XXXX" required />
-        <Input id="character_name" name="character_name" label="Character / Figure Name" required />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input id="size" name="size" label="Preferred Size" placeholder="e.g., 15cm, 25cm" />
-          <Select id="paint_type" name="paint_type" label="Paint Type" options={[{ value: 'unpainted', label: 'Unpainted' }, { value: 'painted', label: 'Painted' }]} placeholder="Select" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input id="required_date" name="required_date" type="date" label="Required Date" />
-          <Input id="budget" name="budget" label="Budget Range" placeholder="e.g., Rs. 5,000 - 15,000" />
-        </div>
-        <div><label className="block text-sm font-medium text-foreground-muted mb-1.5">Description</label><textarea name="description" rows={4} className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50" placeholder="Describe what you want in detail..." /></div>
-        <div><label className="block text-sm font-medium text-foreground-muted mb-1.5">Reference Images</label><input type="file" multiple accept="image/*" className="w-full text-sm text-foreground-muted file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-accent file:text-white hover:file:bg-accent-hover" /></div>
-        <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="agree_terms" required className="accent-accent" /> I agree to the terms and conditions</label>
-        <Button type="submit" size="lg" className="w-full">Submit Custom Order Request</Button>
-      </form>
+        <h1 className="font-serif text-3xl md:text-5xl font-bold tracking-tight text-[#1F150E]">
+          Bring Your Dream Figure To Life
+        </h1>
+        <p className="text-[#6E5A4B] text-sm md:text-base leading-relaxed">
+          From custom anime figures and gaming statues to personalized lithophane lamps and gifts.
+          Fill out the form below to get an instant quote and preview sent directly to our WhatsApp ({WHATSAPP_NUMBER}).
+        </p>
+      </div>
+
+      <CustomOrderClient />
     </div>
   );
 }

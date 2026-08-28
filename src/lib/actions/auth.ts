@@ -5,10 +5,11 @@ import { loginSchema, registerSchema, forgotPasswordSchema } from '@/lib/validat
 import { rateLimitLogin, rateLimitRegister } from '@/lib/rate-limit';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { ADMIN_EMAIL, ADMIN_PASSWORD, setAdminSession, clearAdminSession } from '@/lib/auth-session';
 
 export async function login(formData: FormData) {
   const raw = {
-    email: formData.get('email') as string,
+    email: (formData.get('email') as string)?.trim().toLowerCase(),
     password: formData.get('password') as string,
   };
 
@@ -17,25 +18,75 @@ export async function login(formData: FormData) {
     return { error: parsed.error.issues[0].message };
   }
 
+  const { email, password } = parsed.data;
+  const redirectTarget = (formData.get('redirect') as string) || '/account';
+
+  // Check Master Admin Credentials
+  if (email === ADMIN_EMAIL.toLowerCase() && password === ADMIN_PASSWORD) {
+    await setAdminSession();
+    revalidatePath('/', 'layout');
+    redirect('/admin');
+  }
+
   // Rate limit
   const limit = rateLimitLogin(raw.email);
   if (!limit.success) {
     return { error: 'Too many login attempts. Please try again later.' };
   }
 
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email: parsed.data.email,
-    password: parsed.data.password,
-  });
-
-  if (error) {
+    if (error) {
+      return { error: 'Invalid email or password.' };
+    }
+  } catch {
     return { error: 'Invalid email or password.' };
   }
 
   revalidatePath('/', 'layout');
-  redirect(formData.get('redirect') as string || '/account');
+  redirect(redirectTarget);
+}
+
+export async function adminLogin(formData: FormData) {
+  const email = (formData.get('email') as string)?.trim().toLowerCase();
+  const password = formData.get('password') as string;
+
+  if (!email || !password) {
+    return { error: 'Please enter both email and password.' };
+  }
+
+  if (email === ADMIN_EMAIL.toLowerCase() && password === ADMIN_PASSWORD) {
+    await setAdminSession();
+    revalidatePath('/', 'layout');
+    redirect('/admin');
+  }
+
+  // Attempt Supabase admin sign in as secondary option
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (!error && data?.user) {
+      const role = data.user.app_metadata?.role ?? data.user.user_metadata?.role;
+      if (role === 'admin') {
+        await setAdminSession();
+        revalidatePath('/', 'layout');
+        redirect('/admin');
+      }
+    }
+  } catch {
+    // Ignore fallback error
+  }
+
+  return { error: 'Invalid admin email or password.' };
 }
 
 export async function register(formData: FormData) {
@@ -83,10 +134,15 @@ export async function register(formData: FormData) {
 }
 
 export async function logout() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
+  await clearAdminSession();
+  try {
+    const supabase = await createClient();
+    await supabase.auth.signOut();
+  } catch {
+    // Ignore signOut error in fallback mode
+  }
   revalidatePath('/', 'layout');
-  redirect('/');
+  redirect('/admin/login');
 }
 
 export async function forgotPassword(formData: FormData) {
