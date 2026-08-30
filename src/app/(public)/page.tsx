@@ -1,15 +1,21 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import Image from 'next/image';
-import { MessageCircle, Truck, Shield, Clock, ArrowRight, Package, Star } from 'lucide-react';
-import Button from '@/components/ui/Button';
-import ProductGrid from '@/components/product/ProductGrid';
+import { Video, Send } from 'lucide-react';
+import ProductCarousel from '@/components/product/ProductCarousel';
 import ReviewsShowcase from '@/components/reviews/ReviewsShowcase';
-import { WHATSAPP_LINK, CURRENCY_SYMBOL } from '@/lib/constants';
+import { WHATSAPP_LINK } from '@/lib/constants';
 import { Product, Category } from '@/types';
 import { hasSupabaseConfig } from '@/lib/supabase/config';
 import { demoCategories, demoProducts } from '@/lib/demo-store';
 import { demoPublicReviews, getPublicReviews, PublicReview } from '@/lib/reviews-data';
+import ScrollFX from '@/components/motion/ScrollFx';
+import Magnetic from '@/components/motion/Magnetic';
+import Cursor from '@/components/motion/Cursor';
+import HeroSequence from '@/components/HeroSequence';
+import SectionContent from '@/components/motion/SectionContent';
+import ScrollSlideX from '@/components/motion/ScrollSlideX';
+import PerspectiveCarousel from '@/components/product/PerspectiveCarousel';
+import ScrollFlipSection from '@/components/motion/ScrollFlipSection';
 
 export const revalidate = 60;
 
@@ -60,169 +66,146 @@ async function getHomeData() {
 export default async function HomePage() {
   const { featured, newArrivals, bestSellers, categories, banners, reviews } = await getHomeData();
 
+  const craftPoints = [
+    {
+      iconName: 'Layers',
+      title: 'Micron-Level Layer Resolution',
+      desc: 'Ultra-crisp detail retention even on intricate anime facial features.',
+    },
+    {
+      iconName: 'Sparkles',
+      title: 'Hand-Painted Finishing',
+      desc: 'Custom shade palettes, airbrushing, and protective matte or glossy coats.',
+    },
+  ];
+
+  const process = [
+    { iconName: 'Compass', title: 'Discover', desc: 'Browse the collection, or share a reference for a piece that doesn’t exist yet' },
+    { iconName: 'MessageCircle', title: 'Consult', desc: 'We talk through scale, finish, and detail together before anything is made' },
+    { iconName: 'Palette', title: 'Create', desc: 'Your piece is sculpted, cast, and hand-painted in the atelier' },
+    { iconName: 'Shield', title: 'Deliver', desc: 'Each piece is inspected under studio light before it leaves us' },
+  ];
+
   return (
-    <div>
-      {/* Hero Banner */}
-      <section className="relative bg-background-secondary overflow-hidden hero-ambient">
-        <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 lg:py-32">
-          <div className="max-w-2xl reveal-on-scroll">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              Premium <span className="text-accent">3D-Printed</span> Figures & Collectibles
-            </h1>
-            <p className="text-lg text-foreground-muted mb-8">
-              Handcrafted anime, superhero, and custom figures from Sri Lanka. Every piece is made with passion and precision.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/shop">
-                <Button size="lg" className="magnetic-button">
-                  Shop Now <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
-              <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="magnetic-button">
-                  <MessageCircle className="w-5 h-5" /> Order via WhatsApp
-                </Button>
-              </a>
+    <div className="relative bg-black overflow-x-clip">
+      {/* Scroll FX progress bar + cursor */}
+      <ScrollFX />
+      <Cursor />
+
+      {/* ═══════════════════════════════════════════════════════
+          HERO — scroll-scrubbing car frame sequence
+      ═══════════════════════════════════════════════════════ */}
+      <HeroSequence />
+
+      {/*
+        All section animations below use SectionContent (a client component
+        that wraps framer-motion). The parent <section> layout is NEVER touched.
+        Only the inner glass cards, text groups, and grids are animated.
+      */}
+
+      {/* ═══════════════════════════════════════════════════════
+          SCROLL-SCRUBBED 3D FLIP: GALLERY ➔ CRAFTSMANSHIP
+      ═══════════════════════════════════════════════════════ */}
+      <ScrollFlipSection
+        galleryContent={
+          <ScrollSlideX>
+            <section id="gallery" className="py-10">
+              <SectionContent
+                eyebrow="Selected Works"
+                heading="From the Collection"
+                subtext="Each piece shown here is available to view in 3D, or to enquire about as a one-of-one commission."
+              >
+                {featured.length > 0 && (
+                  <div className="-mx-6 md:-mx-10">
+                    <PerspectiveCarousel products={featured} />
+                  </div>
+                )}
+              </SectionContent>
+            </section>
+          </ScrollSlideX>
+        }
+        craftsmanshipContent={
+          <section className="py-10 w-full">
+            <div className="max-w-7xl mx-auto px-4">
+              <SectionContent
+                eyebrow="Craftsmanship"
+                heading="From Digital Sculpts to Physical Masterpieces"
+                subtext="Every model is meticulously cured, sanded, primed, and hand-painted by our artisans — transforming a digital sculpt into a durable, museum-grade work you can hold."
+                twoCol
+                leftContent={
+                  <div className="relative rounded-2xl overflow-hidden aspect-video border border-white/10 shadow-2xl">
+                    <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+                      <source src="/process-preview.mp4" type="video/mp4" />
+                    </video>
+                    <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-medium border border-white/10 flex items-center gap-2 text-zinc-300">
+                      <Video className="w-4 h-4 text-zinc-400" /> Inside the Atelier
+                    </div>
+                  </div>
+                }
+                craftPoints={craftPoints}
+              />
             </div>
-          </div>
-        </div>
-        <div className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-accent/5 to-transparent" />
-      </section>
-
-      {/* Featured Products */}
-      {featured.length > 0 && (
-        <section className="reveal-on-scroll max-w-7xl mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Featured Products</h2>
-            <Link href="/shop" className="text-accent hover:underline text-sm font-medium flex items-center gap-1">
-              View All <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <ProductGrid products={featured} />
-        </section>
-      )}
-
-      {/* Categories */}
-      {categories.length > 0 && (
-        <section className="reveal-on-scroll bg-background-secondary py-12">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-6">Shop by Category</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/shop/category/${cat.slug}`}
-                  className="category-tile group bg-background-card rounded-2xl border border-border p-6 text-center transition-all"
-                >
-                  <Package className="w-8 h-8 mx-auto mb-3 text-foreground-muted group-hover:text-accent transition-colors" />
-                  <span className="text-sm font-medium group-hover:text-accent transition-colors">{cat.name}</span>
+          </section>
+        }
+      />
+      {/* ═══════════════════════════════════════════════════════
+          COMMISSIONS CTA
+      ═══════════════════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 py-20">
+        <SectionContent
+          variant="cta"
+          eyebrow="Begin a Commission"
+          heading="Commission an Original Piece"
+          subtext={
+            <>
+              Have something in mind that isn&apos;t in the collection? Share reference photos or your own 3D files (<code className="text-zinc-300">.STL</code>, <code className="text-zinc-300">.OBJ</code>) and our atelier will bring it to life.
+            </>
+          }
+          ctaActions={
+            <div className="flex flex-wrap justify-center gap-4">
+              <Magnetic>
+                <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
+                  <button className="flex items-center gap-2 h-12 px-8 rounded-full bg-white text-black text-[15px] font-semibold hover:bg-zinc-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.15)] cursor-pointer">
+                    <Send className="w-4 h-4" /> Begin the Enquiry
+                  </button>
+                </a>
+              </Magnetic>
+              <Magnetic>
+                <Link href="/collection">
+                  <button className="flex items-center gap-2 h-12 px-8 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white text-[15px] font-medium hover:bg-white/10 transition-colors cursor-pointer">
+                    View the Full Collection
+                  </button>
                 </Link>
-              ))}
+              </Magnetic>
             </div>
-          </div>
-        </section>
-      )}
+          }
+        />
+      </section>
 
-      {/* New Arrivals */}
-      {newArrivals.length > 0 && (
-        <section className="reveal-on-scroll max-w-7xl mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">New Arrivals</h2>
-            <Link href="/shop" className="text-accent hover:underline text-sm font-medium flex items-center gap-1">
-              View All <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <ProductGrid products={newArrivals} columns={3} />
-        </section>
-      )}
-
-      {/* Best Sellers */}
-      {bestSellers.length > 0 && (
-        <section className="reveal-on-scroll bg-background-secondary py-12">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">Best Sellers</h2>
-              <Link href="/shop" className="text-accent hover:underline text-sm font-medium flex items-center gap-1">
-                View All <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-            <ProductGrid products={bestSellers} columns={3} />
-          </div>
-        </section>
-      )}
-
-      <ReviewsShowcase reviews={reviews as PublicReview[]} compact />
-
-      {/* How Ordering Works */}
-      <section className="reveal-on-scroll max-w-7xl mx-auto px-4 py-16">
-        <h2 className="text-2xl font-bold text-center mb-12">How Ordering Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {[
-            { icon: Package, title: 'Browse & Choose', desc: 'Explore our collection and pick your favourite figures' },
-            { icon: MessageCircle, title: 'Order & Pay', desc: 'Checkout securely or order via WhatsApp' },
-            { icon: Clock, title: 'We Print & Paint', desc: 'Your figure is crafted with care and precision' },
-            { icon: Truck, title: 'Delivered to You', desc: 'Fast delivery across Sri Lanka' },
-          ].map((step, i) => (
-            <div key={i} className="step-card text-center">
-              <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4 transition-transform duration-300">
-                <step.icon className="w-8 h-8 text-accent" />
-              </div>
-              <div className="text-sm text-accent font-bold mb-1">Step {i + 1}</div>
-              <h3 className="font-semibold mb-2">{step.title}</h3>
-              <p className="text-sm text-foreground-muted">{step.desc}</p>
-            </div>
-          ))}
+      {/* ═══════════════════════════════════════════════════════
+          REVIEWS
+      ═══════════════════════════════════════════════════════ */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <SectionContent
+            eyebrow="Collector Feedback"
+            heading="Verified Collector Reviews"
+            subtext="See what our collectors say on Google Reviews"
+          >
+            <ReviewsShowcase reviews={reviews as PublicReview[]} compact />
+          </SectionContent>
         </div>
       </section>
 
-      {/* Delivery Info Banner */}
-      <section className="reveal-on-scroll bg-accent/5 border-y border-accent/10">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Truck className="w-8 h-8 text-accent" />
-              <div>
-                <h3 className="font-bold">Island-wide Delivery</h3>
-                <p className="text-sm text-foreground-muted">Free delivery on orders over {CURRENCY_SYMBOL} 5,000</p>
-              </div>
-            </div>
-            <Link href="/delivery">
-              <Button variant="outline">Delivery Details</Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter */}
-      <section className="reveal-on-scroll max-w-7xl mx-auto px-4 py-16">
-        <div className="bg-background-card rounded-2xl border border-border p-8 md:p-12 text-center hover-lift">
-          <h2 className="text-2xl font-bold mb-2">Stay Updated</h2>
-          <p className="text-foreground-muted mb-6">Get notified about new arrivals and exclusive offers.</p>
-          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-xl bg-background border border-border text-foreground placeholder:text-foreground-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/50"
-            />
-            <Button type="submit">Subscribe</Button>
-          </form>
-        </div>
-      </section>
-
-      {/* Social Media Placeholders */}
-      <section className="reveal-on-scroll bg-background-secondary py-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold mb-2">Follow Us</h2>
-          <p className="text-foreground-muted mb-6">Stay connected on social media for behind-the-scenes content</p>
-          <div className="flex justify-center gap-4">
-            <a href="https://instagram.com/miniverseprints" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl bg-background-card border border-border hover:border-accent/50 transition-colors text-sm font-medium">
-              Instagram
-            </a>
-            <a href="https://facebook.com/miniverseprints" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl bg-background-card border border-border hover:border-accent/50 transition-colors text-sm font-medium">
-              Facebook
-            </a>
-          </div>
-        </div>
+      {/* ═══════════════════════════════════════════════════════
+          PROCESS
+      ═══════════════════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 py-20">
+        <SectionContent
+          eyebrow="How It Works"
+          heading="The Commissioning Process"
+          processSteps={process}
+        />
       </section>
     </div>
   );
