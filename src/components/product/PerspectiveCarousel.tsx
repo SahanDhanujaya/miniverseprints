@@ -54,7 +54,8 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
   const handleOpen3D = (e: React.MouseEvent, product: Product) => {
     e.stopPropagation();
     // Default fallback asset URL or product model URL
-    const modelUrl = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
+    // const modelUrl = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
+    const modelUrl = 'models/batman.glb';
     setActiveModelUrl(modelUrl);
     setActiveModelTitle(product.name);
     setIsModalOpen(true);

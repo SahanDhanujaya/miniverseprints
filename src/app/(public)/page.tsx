@@ -16,6 +16,9 @@ import SectionContent from '@/components/motion/SectionContent';
 import ScrollSlideX from '@/components/motion/ScrollSlideX';
 import PerspectiveCarousel from '@/components/product/PerspectiveCarousel';
 import ScrollFlipSection from '@/components/motion/ScrollFlipSection';
+import ScrollSlideLeftToRight from '@/components/motion/ScrollSlideLeftToRight';
+import ScrollSlideRightToLeft from '@/components/motion/ScrollSlideRightToLeft';
+import ScrollSlideBottomToTop from '@/components/motion/ScrollSlideBottomToTop';
 
 export const revalidate = 60;
 
@@ -151,40 +154,43 @@ export default async function HomePage() {
       {/* ═══════════════════════════════════════════════════════
           COMMISSIONS CTA
       ═══════════════════════════════════════════════════════ */}
-      <section className="max-w-7xl mx-auto px-4 py-20">
-        <SectionContent
-          variant="cta"
-          eyebrow="Begin a Commission"
-          heading="Commission an Original Piece"
-          subtext={
-            <>
-              Have something in mind that isn&apos;t in the collection? Share reference photos or your own 3D files (<code className="text-zinc-300">.STL</code>, <code className="text-zinc-300">.OBJ</code>) and our atelier will bring it to life.
-            </>
-          }
-          ctaActions={
-            <div className="flex flex-wrap justify-center gap-4">
-              <Magnetic>
-                <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
-                  <button className="flex items-center gap-2 h-12 px-8 rounded-full bg-white text-black text-[15px] font-semibold hover:bg-zinc-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.15)] cursor-pointer">
-                    <Send className="w-4 h-4" /> Begin the Enquiry
-                  </button>
-                </a>
-              </Magnetic>
-              <Magnetic>
-                <Link href="/collection">
-                  <button className="flex items-center gap-2 h-12 px-8 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white text-[15px] font-medium hover:bg-white/10 transition-colors cursor-pointer">
-                    View the Full Collection
-                  </button>
-                </Link>
-              </Magnetic>
-            </div>
-          }
-        />
-      </section>
+      <ScrollSlideLeftToRight>
+        <section className="max-w-7xl mx-auto px-4 py-20">
+          <SectionContent
+            variant="cta"
+            eyebrow="Begin a Commission"
+            heading="Commission an Original Piece"
+            subtext={
+              <>
+                Have something in mind that isn&apos;t in the collection? Share reference photos or your own 3D files (<code className="text-zinc-300">.STL</code>, <code className="text-zinc-300">.OBJ</code>) and our atelier will bring it to life.
+              </>
+            }
+            ctaActions={
+              <div className="flex flex-wrap justify-center gap-4">
+                <Magnetic>
+                  <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
+                    <button className="flex items-center gap-2 h-12 px-8 rounded-full bg-white text-black text-[15px] font-semibold hover:bg-zinc-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.15)] cursor-pointer">
+                      <Send className="w-4 h-4" /> Begin the Enquiry
+                    </button>
+                  </a>
+                </Magnetic>
+                <Magnetic>
+                  <Link href="/collection">
+                    <button className="flex items-center gap-2 h-12 px-8 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white text-[15px] font-medium hover:bg-white/10 transition-colors cursor-pointer">
+                      View the Full Collection
+                    </button>
+                  </Link>
+                </Magnetic>
+              </div>
+            }
+          />
+        </section>
+      </ScrollSlideLeftToRight>
 
       {/* ═══════════════════════════════════════════════════════
           REVIEWS
       ═══════════════════════════════════════════════════════ */}
+      <ScrollSlideRightToLeft>  
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4">
           <SectionContent
@@ -196,10 +202,12 @@ export default async function HomePage() {
           </SectionContent>
         </div>
       </section>
+      </ScrollSlideRightToLeft>
 
       {/* ═══════════════════════════════════════════════════════
           PROCESS
       ═══════════════════════════════════════════════════════ */}
+      <ScrollSlideBottomToTop>
       <section className="max-w-7xl mx-auto px-4 py-20">
         <SectionContent
           eyebrow="How It Works"
@@ -207,6 +215,7 @@ export default async function HomePage() {
           processSteps={process}
         />
       </section>
+      </ScrollSlideBottomToTop>
     </div>
   );
 }
