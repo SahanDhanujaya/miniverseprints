@@ -7,6 +7,7 @@ import { MessageCircle, Box, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '@/types';
 import { getProductEnquiryLink } from '@/lib/utils';
 import ModelViewerModal from '@/components/3d/ModelViewerModal';
+import { resolveProductModelUrl } from '@/lib/product-preview';
 
 interface ProductCarouselProps {
   products: Product[];
@@ -53,9 +54,12 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
 
   const handleOpen3D = (e: React.MouseEvent, product: Product) => {
     e.stopPropagation();
-    // Default fallback asset URL or product model URL
-    // const modelUrl = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
-    const modelUrl = 'models/batman.glb';
+
+    const modelUrl = resolveProductModelUrl(product);
+    if (!modelUrl) {
+      return;
+    }
+
     setActiveModelUrl(modelUrl);
     setActiveModelTitle(product.name);
     setIsModalOpen(true);
@@ -81,9 +85,12 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
           {products.map((product, index) => {
             const offset = index - activeIndex;
             const isActive = offset === 0;
+            const modelUrl = resolveProductModelUrl(product);
+            const hasModel = Boolean(modelUrl);
 
             const productImages = product.images?.length ? product.images : product.product_images || [];
-            const mainImage = productImages.find((img) => img.is_main) || productImages[0];
+            const fallbackMainImage = product.image_url ? { id: 'fallback-image', product_id: product.id, url: product.image_url, alt_text: product.name, sort_order: 0, is_main: true, created_at: new Date().toISOString() } : null;
+            const mainImage = productImages.find((img) => img.is_main) || productImages[0] || fallbackMainImage;
             const imageUrl = mainImage ? (mainImage.url || mainImage.url) : '/placeholder.jpg';
 
             return (
@@ -118,12 +125,18 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
 
                   {/* Interactive Hover CTA to View in 3D */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] z-20 p-4 gap-3">
-                    <button
-                      onClick={(e) => handleOpen3D(e, product)}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/30 bg-black/80 text-white font-medium text-xs backdrop-blur-xl shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:bg-white hover:text-black transition-all cursor-pointer"
-                    >
-                      <Box className="w-4 h-4" /> View Interactive 3D
-                    </button>
+                    {hasModel ? (
+                      <button
+                        onClick={(e) => handleOpen3D(e, product)}
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/30 bg-black/80 text-white font-medium text-xs backdrop-blur-xl shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:bg-white hover:text-black transition-all cursor-pointer"
+                      >
+                        <Box className="w-4 h-4" /> View Interactive 3D
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/20 bg-black/70 text-zinc-300 font-medium text-xs backdrop-blur-xl">
+                        <Box className="w-4 h-4" /> No Preview
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>

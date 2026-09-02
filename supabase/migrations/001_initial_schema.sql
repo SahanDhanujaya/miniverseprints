@@ -108,6 +108,7 @@ CREATE TABLE public.products (
   weight_grams INTEGER,
   dimensions JSONB,
   material TEXT,
+  model_url TEXT,
   is_featured BOOLEAN NOT NULL DEFAULT false,
   is_new_arrival BOOLEAN NOT NULL DEFAULT false,
   is_best_seller BOOLEAN NOT NULL DEFAULT false,

@@ -7,6 +7,7 @@ import { MessageCircle, Box } from 'lucide-react';
 import { Product } from '@/types';
 import { getProductEnquiryLink } from '@/lib/utils';
 import ModelViewerModal from '@/components/3d/ModelViewerModal';
+import { resolveProductModelUrl } from '@/lib/product-preview';
 
 interface ProductCarouselProps {
   products: Product[];
@@ -20,18 +21,19 @@ const BASE_SPEED = 0.6; // px per frame at 60fps
 function CarouselCard({ product }: { product: Product }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const productImages = product.images?.length ? product.images : product.product_images || [];
-  const mainImage = productImages.find((img) => img.is_main) || productImages[0];
-  const modelUrl = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
+  const fallbackMainImage = product.image_url ? { id: 'fallback-image', product_id: product.id, url: product.image_url, alt_text: product.name, sort_order: 0, is_main: true, created_at: new Date().toISOString() } : null;
+  const mainImage = productImages.find((img) => img.is_main) || productImages[0] || fallbackMainImage;
+  const modelUrl = resolveProductModelUrl(product);
+  const hasModel = Boolean(modelUrl);
 
   return (
     <>
       <div
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => hasModel && setIsModalOpen(true)}
         style={{ width: CARD_W, flexShrink: 0 }}
-        className="group relative bg-black/20 rounded-2xl border border-white/5 overflow-hidden
+        className={`group relative bg-black/20 rounded-2xl border border-white/5 overflow-hidden
                    transition-all duration-300 hover:border-white/20
-                   hover:shadow-[0_8px_40px_rgba(255,255,255,0.07)] cursor-pointer
-                   ring-1 ring-transparent hover:ring-white/10"
+                   hover:shadow-[0_8px_40px_rgba(255,255,255,0.07)] ${hasModel ? 'cursor-pointer ring-1 ring-transparent hover:ring-white/10' : 'cursor-default'}`}
       >
         {/* Image */}
         <div className="relative aspect-[3/4] overflow-hidden bg-black/40">
@@ -57,14 +59,20 @@ function CarouselCard({ product }: { product: Product }) {
           )}
 
           {/* 3D hover CTA */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0
-            group-hover:opacity-100 transition-opacity duration-300
-            bg-black/30 backdrop-blur-[2px] z-20">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/20
-              bg-black/70 text-white font-medium text-[12px] backdrop-blur-xl
-              shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-              <Box className="w-3.5 h-3.5" /> View in 3D
-            </div>
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30 backdrop-blur-[2px] z-20">
+            {hasModel ? (
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/20
+                bg-black/70 text-white font-medium text-[12px] backdrop-blur-xl
+                shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <Box className="w-3.5 h-3.5" /> View in 3D
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/20
+                bg-black/70 text-zinc-300 font-medium text-[12px] backdrop-blur-xl
+                shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <Box className="w-3.5 h-3.5" /> No Preview
+              </div>
+            )}
           </div>
 
           {/* Badges */}
@@ -105,12 +113,14 @@ function CarouselCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      <ModelViewerModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        modelUrl={modelUrl}
-        title={product.name}
-      />
+      {hasModel && (
+        <ModelViewerModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          modelUrl={modelUrl as string}
+          title={product.name}
+        />
+      )}
     </>
   );
 }

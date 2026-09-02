@@ -11,7 +11,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
 
   let query = supabase
     .from('products')
-    .select('id, name, slug, regular_price, sale_price, stock_quantity, product_type, is_active, is_featured, is_new_arrival, is_best_seller, categories:product_category(category:categories(name)), images:product_images(url, is_main, sort_order)')
+    .select('id, name, slug, regular_price, sale_price, stock_quantity, product_type, is_active, is_featured, is_new_arrival, is_best_seller, model_url, categories:product_categories(category:categories(name)), images:product_images(url, is_main, sort_order)')
     .order('created_at', { ascending: false });
 
   if (params.q) {

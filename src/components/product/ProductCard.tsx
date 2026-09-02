@@ -7,6 +7,7 @@ import Badge from '@/components/ui/Badge';
 import { Product } from '@/types';
 import { getProductEnquiryLink, truncate } from '@/lib/utils';
 import ModelViewerModal from '@/components/3d/ModelViewerModal';
+import { resolveProductModelUrl } from '@/lib/product-preview';
 
 interface ProductCardProps {
   product: Product;
@@ -16,17 +17,16 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const productImages = product.images?.length ? product.images : product.product_images || [];
-  const mainImage = productImages.find((img) => img.is_main) || productImages[0];
-
-  // Placeholder 3D model since the actual client models will be added later.
-  // In a real app, we would use `product.model_url` if it exists.
-  const modelUrl = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
+  const fallbackMainImage = product.image_url ? { id: 'fallback-image', product_id: product.id, url: product.image_url, alt_text: product.name, sort_order: 0, is_main: true, created_at: new Date().toISOString() } : null;
+  const mainImage = productImages.find((img) => img.is_main) || productImages[0] || fallbackMainImage;
+  const modelUrl = resolveProductModelUrl(product);
+  const hasModel = Boolean(modelUrl);
 
   return (
     <>
       <div 
-        onClick={() => setIsModalOpen(true)}
-        className="product-card group relative bg-black/20 rounded-2xl border border-white/5 overflow-hidden transition-all duration-300 hover:border-white/15 hover:shadow-[0_8px_40px_rgba(255,255,255,0.05)] cursor-pointer ring-1 ring-transparent hover:ring-white/10"
+        onClick={() => hasModel && setIsModalOpen(true)}
+        className={`product-card group relative bg-black/20 rounded-2xl border border-white/5 overflow-hidden transition-all duration-300 hover:border-white/15 hover:shadow-[0_8px_40px_rgba(255,255,255,0.05)] ${hasModel ? 'cursor-pointer ring-1 ring-transparent hover:ring-white/10' : 'cursor-default'}`}
       >
         <div className="block relative aspect-[3/4] overflow-hidden bg-black/40">
           <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.05),transparent_32%),linear-gradient(110deg,transparent_30%,rgba(255,255,255,0.03)_48%,transparent_66%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:animate-shimmer" />
@@ -47,9 +47,17 @@ export default function ProductCard({ product }: ProductCardProps) {
           
           {/* 3D Action Overlay */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30 backdrop-blur-[2px] z-20">
-            <div className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/20 bg-black/70 text-white font-medium text-[13px] backdrop-blur-xl shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-              <Box className="w-4 h-4" /> View in 3D
-            </div>
+            {hasModel ? (
+              <div className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/20 bg-black/70 text-white font-medium text-[13px] backdrop-blur-xl shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <Box className="w-4 h-4" />
+                View in 3D
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/20 bg-black/70 text-zinc-300 font-medium text-[13px] backdrop-blur-xl shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <Box className="w-4 h-4" />
+                No Preview
+              </div>
+            )}
           </div>
 
           {/* Badges */}
@@ -88,12 +96,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </div>
 
-      <ModelViewerModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        modelUrl={modelUrl}
-        title={product.name}
-      />
+      {hasModel && (
+        <ModelViewerModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          modelUrl={modelUrl as string}
+          title={product.name}
+        />
+      )}
     </>
   );
 }
