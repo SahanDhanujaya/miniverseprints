@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { useScroll, useSpring, useTransform } from 'framer-motion';
 import Link from 'next/link';
 
 const TOTAL_FRAMES = 30;
 
-// ─── Glass letter CSS clipped to each text element ───────────────────────────
+// ─── Glass typography styling ─────────────────────────────────────────
 const glassStyle = (brightness = 1): React.CSSProperties => ({
   background: `linear-gradient(
     135deg,
@@ -25,10 +25,11 @@ const glassStyle = (brightness = 1): React.CSSProperties => ({
 });
 
 export default function HeroSequence() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
-  const cachedImagesRef = useRef<HTMLImageElement[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const currentFrameRef = useRef(1);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // 1. Framer Motion Scroll Tracking
   const { scrollYProgress } = useScroll({
@@ -36,84 +37,105 @@ export default function HeroSequence() {
     offset: ['start start', 'end end'],
   });
 
-  // 2. Add Spring Physics to smooth out raw wheel/trackpad scroll inputs
+  // 2. Add inertia spring physics for smooth trackpad scrolling
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 90,
+    damping: 25,
     restDelta: 0.001,
   });
 
-  // 3. Map smooth progress directly to frame index (1 -> 30)
+  // 3. Map scroll position to frame range
   const frameTransform = useTransform(smoothProgress, [0, 1], [1, TOTAL_FRAMES]);
 
-  // Preload all 30 image frames into browser cache
+  // 4. Safe image loader preventing infinite load loops
   useEffect(() => {
-    let isMounted = true;
-    const loadFrames = async () => {
-      const eager = Array.from({ length: 5 }, (_, i) =>
-        new Promise<void>((resolve) => {
-          const img = new Image();
-          img.onload = () => resolve();
-          img.onerror = () => resolve();
-          img.src = `/anime_frames/ezgif-frame-${String(i + 1).padStart(3, '0')}.png`;
-        })
-      );
-      await Promise.all(eager);
-      if (isMounted) setIsLoaded(true);
+    let loadedCount = 0;
+    const images: HTMLImageElement[] = [];
 
-      for (let i = 6; i <= TOTAL_FRAMES; i++) {
-        const img = new Image();
-        img.src = `/anime_frames/ezgif-frame-${String(i).padStart(3, '0')}.png`;
-        cachedImagesRef.current.push(img);
+    const handleSingleLoad = () => {
+      loadedCount++;
+      // Unlock sequence once at least the first 3 frames are guaranteed ready
+      if (loadedCount >= 3 && !isLoaded) {
+        setIsLoaded(true);
       }
     };
-    loadFrames();
-    return () => { isMounted = false; };
+
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      const img = new Image();
+      // Supports .webp or fallback .png files placed in /public/anime_frames/
+      img.src = `/anime_frames/ezgif-frame-${String(i).padStart(3, '0')}.webp`;
+      img.onload = handleSingleLoad;
+      img.onerror = () => {
+        // Fallback to PNG if WebP fails
+        img.src = `/anime_frames/ezgif-frame-${String(i).padStart(3, '0')}.png`;
+        handleSingleLoad();
+      };
+      images.push(img);
+    }
+
+    imagesRef.current = images;
   }, []);
 
-  // Sync current frame state with spring-smoothed transform value
+  // 5. Draw targeted frame to Canvas GPU surface
+  const renderFrame = (index: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const img = imagesRef.current[index - 1];
+
+    if (ctx && img && img.complete) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+  };
+
+  // 6. Connect scroll physics tick to Canvas render pipeline
   useEffect(() => {
+    if (!isLoaded) return;
+
+    // Draw initial frame on mount
+    renderFrame(1);
+
     const unsubscribe = frameTransform.on('change', (latest) => {
       const targetFrame = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(latest)));
-      setCurrentFrame(targetFrame);
+      if (targetFrame !== currentFrameRef.current) {
+        currentFrameRef.current = targetFrame;
+        requestAnimationFrame(() => renderFrame(targetFrame));
+      }
     });
-    return () => unsubscribe();
-  }, [frameTransform]);
 
-  const src = `/anime_frames/ezgif-frame-${String(currentFrame).padStart(3, '0')}.png`;
+    return () => unsubscribe();
+  }, [isLoaded, frameTransform]);
 
   return (
-    /* Expanded container to 600vh for ultra-smooth scroll pacing */
-    <div ref={containerRef} className="relative h-[600vh] w-full">
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+    <div ref={containerRef} className="relative h-[500vh] w-full">
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
+        
+        {/* Canvas Engine — 60 FPS GPU Render Target */}
+        <canvas
+          ref={canvasRef}
+          width={1920}
+          height={1080}
+          className="w-full h-full object-cover"
+        />
 
-        {/* ── Car frame canvas ──────────────────────────────────── */}
-        <div className="absolute inset-0 bg-black">
-          {!isLoaded ? (
-            <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-              <div className="w-10 h-10 rounded-full border-4 border-zinc-700 border-t-white animate-spin" />
-              <span className="text-[11px] text-zinc-500 tracking-[0.3em] uppercase">Loading sequence…</span>
-            </div>
-          ) : (
-            <img
-              key={src}
-              src={src}
-              alt="Rotating 3D-printed car"
-              className="w-full h-full object-cover"
-              decoding="async"
-            />
-          )}
-          {/* Bottom fade */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-black/40 pointer-events-none" />
-          {/* Soft left darkening so text is legible */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent pointer-events-none" />
-        </div>
+        {/* Loading Spinner Fallback */}
+        {!isLoaded && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black gap-4 z-20">
+            <div className="w-10 h-10 rounded-full border-4 border-zinc-700 border-t-white animate-spin" />
+            <span className="text-[11px] text-zinc-500 tracking-[0.3em] uppercase">
+              Preparing Atelier Hardware…
+            </span>
+          </div>
+        )}
 
-        {/* ── Reference-style layout: bottom-left anchored ─────── */}
+        {/* Ambient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-black/40 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent pointer-events-none" />
+
+        {/* Hero Section Content Overlay */}
         {isLoaded && (
           <div className="absolute inset-0 flex flex-col justify-end pb-16 px-8 md:px-16 z-10 pointer-events-none select-none max-w-4xl">
-
-            {/* ── Title — two-line hierarchy ─── */}
             <div className="mb-6">
               <div
                 className="block font-bold leading-none tracking-tight"
@@ -124,7 +146,6 @@ export default function HeroSequence() {
               >
                 Print Your Ideas
               </div>
-
               <div
                 className="block font-black leading-none tracking-tighter"
                 style={{
@@ -137,10 +158,9 @@ export default function HeroSequence() {
               </div>
             </div>
 
-            {/* ── Description + CTA row ────────────────────────── */}
             <div className="flex items-end justify-between gap-8 flex-wrap pointer-events-auto">
               <p className="text-[11px] md:text-[12px] leading-[1.9] tracking-[0.18em] uppercase text-zinc-400 max-w-xs">
-                We transform your concepts into premium&nbsp;3D-printed miniatures&nbsp;&amp; collectibles — museum-grade detail, hand-painted finish.
+                We transform your concepts into premium 3D-printed miniatures & collectibles — museum-grade detail, hand-painted finish.
               </p>
 
               <Link href="#gallery" className="flex items-center gap-4 group flex-shrink-0">
