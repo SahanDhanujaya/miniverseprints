@@ -11,6 +11,10 @@ export default function CustomOrderActions({ orderId, currentStatus }: { orderId
   const [quotationPrice, setQuotationPrice] = useState('');
   const [quotationNotes, setQuotationNotes] = useState('');
 
+  const sendQuotation = async () => {
+    await adminSubmitCustomOrderQuotation(orderId, parseFloat(quotationPrice), quotationNotes);
+  };
+
   return (
     <div className="flex flex-col gap-2 ml-4 flex-shrink-0 min-w-[200px]">
       <div>
@@ -23,7 +27,7 @@ export default function CustomOrderActions({ orderId, currentStatus }: { orderId
         <div>
           <Input value={quotationPrice} onChange={e => setQuotationPrice(e.target.value)} type="number" step="0.01" placeholder="Quotation price (LKR)" className="mb-1" />
           <Input value={quotationNotes} onChange={e => setQuotationNotes(e.target.value)} placeholder="Notes" className="mb-1" />
-          <Button size="sm" variant="outline" onClick={() => quotationPrice && adminSubmitCustomOrderQuotation(orderId, parseFloat(quotationPrice), quotationNotes)} className="w-full" disabled={!quotationPrice}>
+          <Button size="sm" variant="outline" onClick={() => sendQuotation()} className="w-full" disabled={!quotationPrice}>
             Send Quotation
           </Button>
         </div>

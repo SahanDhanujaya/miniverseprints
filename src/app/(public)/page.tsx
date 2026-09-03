@@ -1,26 +1,36 @@
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import Image from 'next/image';
-import { MessageCircle, Truck, Shield, Clock, ArrowRight, Package, Star } from 'lucide-react';
-import Button from '@/components/ui/Button';
-import ProductGrid from '@/components/product/ProductGrid';
+import { Video, Send } from 'lucide-react';
+import ProductCarousel from '@/components/product/ProductCarousel';
 import ReviewsShowcase from '@/components/reviews/ReviewsShowcase';
-import { WHATSAPP_LINK, CURRENCY_SYMBOL } from '@/lib/constants';
+import { WHATSAPP_LINK } from '@/lib/constants';
 import { Product, Category } from '@/types';
 import { hasSupabaseConfig } from '@/lib/supabase/config';
+import { hasSupabasePreview } from '@/lib/product-preview';
 import { demoCategories, demoProducts } from '@/lib/demo-store';
 import { demoPublicReviews, getPublicReviews, PublicReview } from '@/lib/reviews-data';
+import ScrollFX from '@/components/motion/ScrollFx';
+import Magnetic from '@/components/motion/Magnetic';
+import Cursor from '@/components/motion/Cursor';
+import HeroSequence from '@/components/HeroSequence';
+import SectionContent from '@/components/motion/SectionContent';
+import ScrollSlideX from '@/components/motion/ScrollSlideX';
+import PerspectiveCarousel from '@/components/product/PerspectiveCarousel';
+import ScrollFlipSection from '@/components/motion/ScrollFlipSection';
+import ScrollSlideLeftToRight from '@/components/motion/ScrollSlideLeftToRight';
+import ScrollSlideRightToLeft from '@/components/motion/ScrollSlideRightToLeft';
+import ScrollSlideBottomToTop from '@/components/motion/ScrollSlideBottomToTop';
 
 export const revalidate = 60;
 
 function getDemoHomeData() {
   return {
-    featured: demoProducts.filter((product) => product.is_featured),
-    newArrivals: demoProducts.filter((product) => product.is_new_arrival),
-    bestSellers: demoProducts.filter((product) => product.is_best_seller),
-    categories: demoCategories,
+    featured: [],
+    newArrivals: "",
+    bestSellers: "",
+    categories: "",
     banners: [],
-    reviews: demoPublicReviews.slice(0, 3),
+    reviews: "",
   };
 }
 
@@ -29,16 +39,41 @@ async function getHomeData() {
     return getDemoHomeData();
   }
 
-  const supabase = await createClient();
+  // Use admin client for public home queries to avoid RLS blocking access to product images set by admins
+  const supabase = createAdminClient();
 
   const [featured, newArrivals, bestSellers, categories, banners, reviews] = await Promise.all([
-    supabase.from('products').select('*, product_images(*)').eq('is_featured', true).eq('is_active', true).limit(24),
-    supabase.from('products').select('*, product_images(*)').eq('is_new_arrival', true).eq('is_active', true).limit(24),
-    supabase.from('products').select('*, product_images(*)').eq('is_best_seller', true).eq('is_active', true).limit(24),
+    supabase.from('products').select('*').order('created_at', { ascending: false }).limit(24),
+    supabase.from('products').select('*').eq('is_new_arrival', true).eq('is_active', true).limit(24),
+    supabase.from('products').select('*').eq('is_best_seller', true).eq('is_active', true).limit(24),
     supabase.from('categories').select('*').eq('is_active', true).order('sort_order').limit(12),
     supabase.from('homepage_banners').select('*').eq('is_active', true).order('sort_order').limit(5),
     getPublicReviews(3),
   ]);
+
+  // Development-time debug: log featured products and why they may be filtered
+  if (process.env.NODE_ENV !== 'production') {
+    try {
+      const items = (featured.data || []).map((p: any) => {
+        const model = p.model_url || (p.attributes || []).find((a: any) => a?.name === 'model_url')?.value || null;
+        const images = p.image_url?.length ? p.image_url : p.images || [];
+        const main = images.find((i: any) => i.is_main) || images[0] || (p.image_url ? { url: p.image_url } : null);
+        const imageUrl = main ? (main.url || main) : null;
+        return {
+          id: p.id,
+          slug: p.slug,
+          modelUrl: p.model_url,
+          imageUrl: p.image_url,
+          hasSupabasePreview: hasSupabasePreview(p),
+        };
+      });
+
+      console.log('DEBUG: featured products count =', (featured.data || []).length);
+      console.log('DEBUG featured products preview check:', JSON.stringify(items, null, 2));
+    } catch (e) {
+      console.log('DEBUG: failed to compute featured preview debug', e);
+    }
+  }
 
   if (featured.error || newArrivals.error || bestSellers.error || categories.error) {
     return {
@@ -47,8 +82,29 @@ async function getHomeData() {
     };
   }
 
+  // Server-side: prefer featured items that have Supabase-hosted previews.
+  const rawFeatured = (featured.data || []) as Product[];
+  const supaFeatured = rawFeatured.filter((p) => hasSupabasePreview(p as any));
+
+  let featuredProducts: Product[] = [];
+  if (supaFeatured.length > 0) {
+    featuredProducts = supaFeatured;
+  } else if (rawFeatured.length === 0) {
+    // If there were no featured rows, fall back to recent active products and prefer Supabase previews
+    const { data: recent } = await supabase.from('products').select('*, product_images(*), attributes(*), product_attributes(*)').eq('is_active', true).order('created_at', { ascending: false }).limit(50);
+    const pool = (recent || []) as Product[];
+    const filtered = pool.filter((p) => hasSupabasePreview(p as any));
+    featuredProducts = filtered.length > 0 ? filtered : pool;
+  } else {
+    // There were featured rows but none had Supabase previews — try recent Supabase items, else fall back to raw featured so gallery isn't empty.
+    const { data: recent } = await supabase.from('products').select('*, product_images(*), attributes(*), product_attributes(*)').eq('is_active', true).order('created_at', { ascending: false }).limit(50);
+    const pool = (recent || []) as Product[];
+    const filtered = pool.filter((p) => hasSupabasePreview(p as any));
+    featuredProducts = filtered.length > 0 ? filtered : rawFeatured;
+  }
+
   return {
-    featured: (featured.data || []) as Product[],
+    featured: featuredProducts,
     newArrivals: (newArrivals.data || []) as Product[],
     bestSellers: (bestSellers.data || []) as Product[],
     categories: (categories.data || []) as Category[],
@@ -60,170 +116,119 @@ async function getHomeData() {
 export default async function HomePage() {
   const { featured, newArrivals, bestSellers, categories, banners, reviews } = await getHomeData();
 
+  const craftPoints = [
+    {
+      iconName: 'Layers',
+      title: 'Micron-Level Layer Resolution',
+      desc: 'Ultra-crisp detail retention even on intricate anime facial features.',
+    },
+    {
+      iconName: 'Sparkles',
+      title: 'Hand-Painted Finishing',
+      desc: 'Custom shade palettes, airbrushing, and protective matte or glossy coats.',
+    },
+  ];
+
+  const process = [
+    { iconName: 'Compass', title: 'Discover', desc: 'Browse the collection, or share a reference for a piece that doesn’t exist yet' },
+    { iconName: 'MessageCircle', title: 'Consult', desc: 'We talk through scale, finish, and detail together before anything is made' },
+    { iconName: 'Palette', title: 'Create', desc: 'Your piece is sculpted, cast, and hand-painted in the atelier' },
+    { iconName: 'Shield', title: 'Deliver', desc: 'Each piece is inspected under studio light before it leaves us' },
+  ];
+
   return (
-    <div>
-      {/* Hero Banner */}
-      <section className="relative bg-background-secondary overflow-hidden hero-ambient">
-        <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 lg:py-32">
-          <div className="max-w-2xl reveal-on-scroll">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              Premium <span className="text-accent">3D-Printed</span> Figures & Collectibles
-            </h1>
-            <p className="text-lg text-foreground-muted mb-8">
-              Handcrafted anime, superhero, and custom figures from Sri Lanka. Every piece is made with passion and precision.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/shop">
-                <Button size="lg" className="magnetic-button">
-                  Shop Now <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
-              <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="magnetic-button">
-                  <MessageCircle className="w-5 h-5" /> Order via WhatsApp
-                </Button>
-              </a>
+    <div className="relative bg-black overflow-x-clip">
+      {/* Scroll FX progress bar + cursor */}
+      <ScrollFX />
+      <Cursor />
+
+      {/* ═══════════════════════════════════════════════════════
+          HERO — scroll-scrubbing car frame sequence
+      ═══════════════════════════════════════════════════════ */}
+      <HeroSequence />
+
+      {/*
+        All section animations below use SectionContent (a client component
+        that wraps framer-motion). The parent <section> layout is NEVER touched.
+        Only the inner glass cards, text groups, and grids are animated.
+      */}
+
+      {/* ═══════════════════════════════════════════════════════
+          SCROLL-SCRUBBED 3D FLIP: GALLERY ➔ CRAFTSMANSHIP
+      ═══════════════════════════════════════════════════════ */}
+      <ScrollFlipSection
+        galleryContent={
+          <ScrollSlideX>
+            <section id="gallery" className="py-10">
+              <SectionContent
+                eyebrow="Selected Works"
+                heading="From the Collection"
+                subtext="Each piece shown here is available to view in 3D, or to enquire about as a one-of-one commission."
+              >
+                {featured.length > 0 && (
+                  <div className="-mx-6 md:-mx-10">
+                    <PerspectiveCarousel products={featured} />
+                  </div>
+                )}
+              </SectionContent>
+            </section>
+          </ScrollSlideX>
+        }
+        craftsmanshipContent={
+          <section className="py-10 w-full">
+            <div className="max-w-7xl mx-auto px-4">
+              <SectionContent
+                eyebrow="Craftsmanship"
+                heading="From Digital Sculpts to Physical Masterpieces"
+                subtext="Every model is meticulously cured, sanded, primed, and hand-painted by our artisans — transforming a digital sculpt into a durable, museum-grade work you can hold."
+                twoCol
+                leftContent={
+                  <div className="relative rounded-2xl overflow-hidden aspect-video border border-white/10 shadow-2xl">
+                    <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+                      <source src="/process-preview.mp4" type="video/mp4" />
+                    </video>
+                    <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-medium border border-white/10 flex items-center gap-2 text-zinc-300">
+                      <Video className="w-4 h-4 text-zinc-400" /> Inside the Atelier
+                    </div>
+                  </div>
+                }
+                craftPoints={craftPoints}
+              />
             </div>
-          </div>
-        </div>
-        <div className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-accent/5 to-transparent" />
-      </section>
+          </section>
+        }
+      />
 
-      {/* Featured Products */}
-      {featured.length > 0 && (
-        <section className="reveal-on-scroll max-w-7xl mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Featured Products</h2>
-            <Link href="/shop" className="text-accent hover:underline text-sm font-medium flex items-center gap-1">
-              View All <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <ProductGrid products={featured} />
-        </section>
-      )}
 
-      {/* Categories */}
-      {categories.length > 0 && (
-        <section className="reveal-on-scroll bg-background-secondary py-12">
+      {/* ═══════════════════════════════════════════════════════
+          REVIEWS
+      ═══════════════════════════════════════════════════════ */}
+      <ScrollSlideRightToLeft>
+        <section className="py-16">
           <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-6">Shop by Category</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/shop/category/${cat.slug}`}
-                  className="category-tile group bg-background-card rounded-2xl border border-border p-6 text-center transition-all"
-                >
-                  <Package className="w-8 h-8 mx-auto mb-3 text-foreground-muted group-hover:text-accent transition-colors" />
-                  <span className="text-sm font-medium group-hover:text-accent transition-colors">{cat.name}</span>
-                </Link>
-              ))}
-            </div>
+            <SectionContent
+              eyebrow="Collector Feedback"
+              heading="Verified Collector Reviews"
+              subtext="See what our collectors say on Google Reviews"
+            >
+              <ReviewsShowcase reviews={reviews as PublicReview[]} compact />
+            </SectionContent>
           </div>
         </section>
-      )}
+      </ScrollSlideRightToLeft>
 
-      {/* New Arrivals */}
-      {newArrivals.length > 0 && (
-        <section className="reveal-on-scroll max-w-7xl mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">New Arrivals</h2>
-            <Link href="/shop" className="text-accent hover:underline text-sm font-medium flex items-center gap-1">
-              View All <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <ProductGrid products={newArrivals} columns={3} />
+      {/* ═══════════════════════════════════════════════════════
+          PROCESS
+      ═══════════════════════════════════════════════════════ */}
+      <ScrollSlideBottomToTop>
+        <section className="max-w-7xl mx-auto px-4 py-20">
+          <SectionContent
+            eyebrow="How It Works"
+            heading="The Commissioning Process"
+            processSteps={process}
+          />
         </section>
-      )}
-
-      {/* Best Sellers */}
-      {bestSellers.length > 0 && (
-        <section className="reveal-on-scroll bg-background-secondary py-12">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">Best Sellers</h2>
-              <Link href="/shop" className="text-accent hover:underline text-sm font-medium flex items-center gap-1">
-                View All <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-            <ProductGrid products={bestSellers} columns={3} />
-          </div>
-        </section>
-      )}
-
-      <ReviewsShowcase reviews={reviews as PublicReview[]} compact />
-
-      {/* How Ordering Works */}
-      <section className="reveal-on-scroll max-w-7xl mx-auto px-4 py-16">
-        <h2 className="text-2xl font-bold text-center mb-12">How Ordering Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {[
-            { icon: Package, title: 'Browse & Choose', desc: 'Explore our collection and pick your favourite figures' },
-            { icon: MessageCircle, title: 'Order & Pay', desc: 'Checkout securely or order via WhatsApp' },
-            { icon: Clock, title: 'We Print & Paint', desc: 'Your figure is crafted with care and precision' },
-            { icon: Truck, title: 'Delivered to You', desc: 'Fast delivery across Sri Lanka' },
-          ].map((step, i) => (
-            <div key={i} className="step-card text-center">
-              <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4 transition-transform duration-300">
-                <step.icon className="w-8 h-8 text-accent" />
-              </div>
-              <div className="text-sm text-accent font-bold mb-1">Step {i + 1}</div>
-              <h3 className="font-semibold mb-2">{step.title}</h3>
-              <p className="text-sm text-foreground-muted">{step.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Delivery Info Banner */}
-      <section className="reveal-on-scroll bg-accent/5 border-y border-accent/10">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Truck className="w-8 h-8 text-accent" />
-              <div>
-                <h3 className="font-bold">Island-wide Delivery</h3>
-                <p className="text-sm text-foreground-muted">Free delivery on orders over {CURRENCY_SYMBOL} 5,000</p>
-              </div>
-            </div>
-            <Link href="/delivery">
-              <Button variant="outline">Delivery Details</Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter */}
-      <section className="reveal-on-scroll max-w-7xl mx-auto px-4 py-16">
-        <div className="bg-background-card rounded-2xl border border-border p-8 md:p-12 text-center hover-lift">
-          <h2 className="text-2xl font-bold mb-2">Stay Updated</h2>
-          <p className="text-foreground-muted mb-6">Get notified about new arrivals and exclusive offers.</p>
-          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-xl bg-background border border-border text-foreground placeholder:text-foreground-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/50"
-            />
-            <Button type="submit">Subscribe</Button>
-          </form>
-        </div>
-      </section>
-
-      {/* Social Media Placeholders */}
-      <section className="reveal-on-scroll bg-background-secondary py-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold mb-2">Follow Us</h2>
-          <p className="text-foreground-muted mb-6">Stay connected on social media for behind-the-scenes content</p>
-          <div className="flex justify-center gap-4">
-            <a href="https://instagram.com/miniverseprints" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl bg-background-card border border-border hover:border-accent/50 transition-colors text-sm font-medium">
-              Instagram
-            </a>
-            <a href="https://facebook.com/miniverseprints" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl bg-background-card border border-border hover:border-accent/50 transition-colors text-sm font-medium">
-              Facebook
-            </a>
-          </div>
-        </div>
-      </section>
+      </ScrollSlideBottomToTop>
     </div>
   );
 }

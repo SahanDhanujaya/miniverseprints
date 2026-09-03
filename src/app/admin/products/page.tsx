@@ -11,7 +11,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
 
   let query = supabase
     .from('products')
-    .select('id, name, slug, regular_price, sale_price, stock_quantity, product_type, is_active, is_featured, is_new_arrival, is_best_seller, categories:product_category(category:categories(name)), images:product_images(url, is_main, sort_order)')
+    .select('id, name, slug, regular_price, sale_price, stock_quantity, product_type, is_active, is_featured, is_new_arrival, is_best_seller, model_url, categories:product_categories(category:categories(name)), images:product_images(url, is_main, sort_order)')
     .order('created_at', { ascending: false });
 
   if (params.q) {
@@ -28,7 +28,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Products</h1>
-        <Link href="/admin/products/new" className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-xl font-medium hover:bg-accent-hover transition-colors">
+        <Link href="/admin/products/new" className="flex items-center gap-2 px-4 py-2 bg-accent text-black font-semibold rounded-xl font-medium hover:bg-accent-hover transition-colors">
           <Plus className="w-4 h-4" /> Add Product
         </Link>
       </div>

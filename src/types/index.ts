@@ -62,6 +62,8 @@ export interface Product {
   name: string;
   slug: string;
   sku: string | null;
+  image_url?: string | null;
+  model_url?: string | null;
   short_description: string | null;
   full_description: string | null;
   regular_price: number;
@@ -92,7 +94,7 @@ export interface Product {
   review_count?: number;
 }
 
-export interface ProductImage {
+export interface  ProductImage {
   id: string;
   product_id: string;
   url: string;

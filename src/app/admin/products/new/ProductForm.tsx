@@ -1,8 +1,8 @@
 'use client';
 
 import { useActionState } from 'react';
-import { adminCreateProduct } from '@/lib/actions/admin-products';
 import Input from '@/components/ui/Input';
+import MediaUploader from '@/components/admin/MediaUploader';
 import Button from '@/components/ui/Button';
 import { PRODUCT_TYPES } from '@/lib/constants';
 
@@ -19,6 +19,7 @@ export default function ProductForm({ categories, tags, product }: ProductFormPr
       const { adminUpdateProduct } = await import('@/lib/actions/admin-products');
       return adminUpdateProduct(product.id, formData);
     }
+    const { adminCreateProduct } = await import('@/lib/actions/admin-products');
     return adminCreateProduct(formData);
   }, null);
 
@@ -107,10 +108,36 @@ export default function ProductForm({ categories, tags, product }: ProductFormPr
               Best Seller
             </label>
           </div>
+
+          {/* Media Uploads */}
+          <div className="space-y-4 bg-background-card rounded-2xl border border-border p-6">
+            <h2 className="font-bold">Media</h2>
+            <div>
+              <label className="block text-sm font-medium mb-1">Main Image</label>
+              {/* MediaUploader will add hidden inputs named 'image_url' with the uploaded public URLs */}
+              <MediaUploader bucketPath="products" bucketName={process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET || 'miniverse_bucket'} accept="image/*" multiple={false} name="image_url" />
+              {product?.image_url && (
+                <div className="text-xs text-foreground-muted">Current preview: {product.image_url}</div>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">3D Model (.glb)</label>
+              <MediaUploader
+                bucketPath="models"
+                bucketName={process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET || 'miniverse_bucket'}
+                accept="model/gltf-binary,.glb"
+                multiple={false}
+                name="model_url"
+              />
+              {product?.model_url && (
+                <div className="text-xs text-foreground-muted">Current preview: {product.model_url}</div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="flex gap-3">
-          <Button type="submit" isLoading={isPending}>{isEdit ? 'Update Product' : 'Create Product'}</Button>
+          <Button className="text-black! font-bold!" type="submit" isLoading={isPending}>{isEdit ? 'Update Product' : 'Create Product'}</Button>
           <a href="/admin/products" className="px-4 py-2 border border-border rounded-xl text-sm hover:bg-background-hover transition-colors">Cancel</a>
         </div>
       </form>

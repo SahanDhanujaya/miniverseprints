@@ -14,6 +14,8 @@ export const productSchema = z.object({
   production_lead_time_days: z.coerce.number().int().min(0).optional().nullable(),
   weight_grams: z.coerce.number().int().min(0).optional().nullable(),
   material: z.string().optional(),
+  image_url: z.string().url('Image URL must be a valid URL').optional().nullable(),
+  model_url: z.string().url('Model URL must be a valid URL').optional().nullable(),
   is_featured: z.boolean().default(false),
   is_new_arrival: z.boolean().default(false),
   is_best_seller: z.boolean().default(false),

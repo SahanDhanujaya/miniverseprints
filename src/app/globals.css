@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #100b08;
-  --background-secondary: #1b120c;
-  --background-card: #24170f;
-  --background-hover: #342216;
-  --foreground: #fff7ec;
-  --foreground-muted: #cdb79e;
-  --accent: #8f5524;
-  --accent-hover: #a96b31;
-  --accent-light: #f6d7ad;
-  --border: #49301f;
-  --border-light: #634228;
+  --background: #000000;
+  --background-secondary: #0a0a0a;
+  --background-card: #111111;
+  --background-hover: #1f1f1f;
+  --foreground: #ffffff;
+  --foreground-muted: #a1a1aa;
+  --accent: #f4f4f5;
+  --accent-hover: #d4d4d8;
+  --accent-light: #ffffff;
+  --border: #27272a;
+  --border-light: #3f3f46;
   --success: #22C55E;
   --warning: #d8963d;
   --error: #e05243;
@@ -57,10 +57,7 @@
 }
 
 body {
-  background:
-    radial-gradient(circle at 85% 8%, rgba(190, 137, 82, 0.18), transparent 28rem),
-    radial-gradient(circle at 12% 0%, rgba(111, 64, 29, 0.22), transparent 24rem),
-    linear-gradient(180deg, #17100b 0%, var(--background) 42%, #0b0705 100%);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   min-height: 100vh;
@@ -78,6 +75,10 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--foreground) !important;
 }
 
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -89,8 +90,8 @@ input:-webkit-autofill:focus {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(143, 85, 36, 0.42); }
-  50% { box-shadow: 0 0 0 8px rgba(143, 85, 36, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
 }
 
 @keyframes shimmer {
@@ -115,6 +116,20 @@ input:-webkit-autofill:focus {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.32; }
   50% { transform: translate3d(-18px, 14px, 0) rotate(2deg); opacity: 0.52; }
 }
+
+@keyframes slowzoom {
+  from { filter: saturate(1); }
+  to { filter: saturate(1.08); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* =========================================================
+   UTILITY ANIMATION CLASSES
+   ========================================================= */
 
 .animate-fade-in {
   animation: fadeIn 0.3s ease-out forwards;
@@ -157,8 +172,8 @@ input:-webkit-autofill:focus {
 .hero-ambient::before {
   animation: ambientSweep 9s ease-in-out infinite;
   background:
-    radial-gradient(circle at 25% 30%, rgba(246, 215, 173, 0.16), transparent 16rem),
-    radial-gradient(circle at 70% 55%, rgba(169, 107, 49, 0.22), transparent 20rem);
+    radial-gradient(circle at 25% 30%, rgba(255, 255, 255, 0.08), transparent 16rem),
+    radial-gradient(circle at 70% 55%, rgba(255, 255, 255, 0.10), transparent 20rem);
   content: "";
   inset: -20%;
   pointer-events: none;
@@ -184,7 +199,7 @@ input:-webkit-autofill:focus {
 .product-card::after,
 .category-tile::after,
 .hover-lift::after {
-  background: linear-gradient(135deg, rgba(246, 215, 173, 0.26), transparent 42%, rgba(169, 107, 49, 0.20));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent 42%, rgba(255, 255, 255, 0.05));
   content: "";
   inset: 0;
   opacity: 0;
@@ -195,7 +210,7 @@ input:-webkit-autofill:focus {
 
 .product-card:hover {
   border-color: color-mix(in srgb, var(--accent-light) 54%, transparent);
-  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.34), 0 0 28px rgba(169, 107, 49, 0.18);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.7), 0 0 28px rgba(255, 255, 255, 0.08);
   transform: translateY(-8px) rotateX(1deg);
 }
 
@@ -220,23 +235,137 @@ input:-webkit-autofill:focus {
 
 .category-tile:hover svg,
 .step-card:hover svg {
-  filter: drop-shadow(0 0 12px rgba(246, 215, 173, 0.36));
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.36));
   transform: scale(1.08) rotate(-4deg);
 }
 
+.step-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.step-card:hover {
+  transform: translateY(-6px);
+}
+
 .step-card:hover > div:first-child {
-  background: rgba(143, 85, 36, 0.18);
+  background: rgba(255, 255, 255, 0.08);
   transform: translateY(-5px);
 }
 
 .magnetic-button {
-  box-shadow: 0 8px 22px rgba(143, 85, 36, 0.18);
+  box-shadow: 0 8px 22px rgba(255, 255, 255, 0.05);
 }
 
 .magnetic-button:hover {
-  box-shadow: 0 14px 34px rgba(143, 85, 36, 0.30);
+  box-shadow: 0 14px 34px rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
 }
+
+/* =========================================================
+   MOTION SYSTEM — Reveal.tsx / ScrollFX.tsx / Parallax.tsx /
+   Marquee.tsx / Cursor.tsx
+   Depends on --scroll (0–1) being set on <html> by ScrollFX.tsx
+   ========================================================= */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(6px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.reveal-clip {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.reveal-clip.is-in {
+  clip-path: inset(0 0 0% 0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.reveal-scale.is-in {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.reveal-tilt {
+  opacity: 0;
+  transform: perspective(800px) rotateX(18deg) translateY(20px);
+  transform-origin: top center;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-tilt.is-in {
+  opacity: 1;
+  transform: perspective(800px) rotateX(0deg) translateY(0);
+}
+
+/* Staggered children (apply .stagger to a parent of Reveal siblings, or
+   use inline delay props from Reveal directly — this is a CSS-only
+   fallback for lists rendered by components you don't control) */
+.stagger > * {
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+/* Background video: scroll-linked parallax + darkening */
+.video-parallax {
+  transform: scale(calc(1.05 + var(--scroll, 0) * 0.14));
+  transition: transform 0.05s linear;
+}
+.scrim-dynamic {
+  opacity: calc(0.55 + var(--scroll, 0) * 0.35);
+  transition: opacity 0.05s linear;
+}
+
+/* Floating decorative accents (used with Parallax.tsx) */
+.float-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  pointer-events: none;
+  opacity: 0.35;
+  background: var(--accent);
+}
+
+/* Custom cursor */
+.site-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 999;
+  background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+}
+.site-cursor.cursor-hover {
+  width: 52px;
+  height: 52px;
+  opacity: 0.8;
+}
+body.has-custom-cursor,
+body.has-custom-cursor a,
+body.has-custom-cursor button {
+  cursor: none;
+}
+
+/* =========================================================
+   REDUCED MOTION — one consolidated override
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -246,5 +375,22 @@ input:-webkit-autofill:focus {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
+  }
+
+  .reveal,
+  .reveal-clip,
+  .reveal-scale,
+  .reveal-tilt {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: inset(0) !important;
+    filter: none !important;
+  }
+  .video-parallax {
+    transform: none !important;
+  }
+  .site-cursor,
+  .float-blob {
+    display: none !important;
   }
 }

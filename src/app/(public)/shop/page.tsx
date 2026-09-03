@@ -74,7 +74,7 @@ async function getShopData(searchParams: { [key: string]: string | undefined }) 
 
   let query = supabase
     .from('products')
-    .select('*, product_images(*)', { count: 'exact' })
+    .select('*, product_images(*), product_attributes(*)', { count: 'exact' })
     .eq('is_active', true);
 
   if (productIdsForCategory) {
