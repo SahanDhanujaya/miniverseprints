@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  outputFileTracingExcludes: {
+    '*': ['./.next/server/middleware.js.nft.json'],
+  },
   images: {
     remotePatterns: [
       {
@@ -13,7 +16,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  output: "standalone",
 };
 
 export default nextConfig;
