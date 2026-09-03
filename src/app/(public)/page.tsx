@@ -20,6 +20,7 @@ import ScrollFlipSection from '@/components/motion/ScrollFlipSection';
 import ScrollSlideLeftToRight from '@/components/motion/ScrollSlideLeftToRight';
 import ScrollSlideRightToLeft from '@/components/motion/ScrollSlideRightToLeft';
 import ScrollSlideBottomToTop from '@/components/motion/ScrollSlideBottomToTop';
+import CommissionsCTA from '@/components/cta/CommissionsCTA';
 
 export const revalidate = 60;
 
@@ -43,7 +44,7 @@ async function getHomeData() {
   const supabase = createAdminClient();
 
   const [featured, newArrivals, bestSellers, categories, banners, reviews] = await Promise.all([
-    supabase.from('products').select('*').order('created_at', { ascending: false }).limit(24),
+    supabase.from('products').select('*').order('created_at', { ascending: false }),
     supabase.from('products').select('*').eq('is_new_arrival', true).eq('is_active', true).limit(24),
     supabase.from('products').select('*').eq('is_best_seller', true).eq('is_active', true).limit(24),
     supabase.from('categories').select('*').eq('is_active', true).order('sort_order').limit(12),
@@ -199,13 +200,22 @@ export default async function HomePage() {
         }
       />
 
+      {/* CTA  */}
+      <ScrollSlideLeftToRight>
+        <section className="py-16">
+          <div className="max-w-7xl mx-auto px-4">
+            <CommissionsCTA />
+          </div>
+        </section>
+      </ScrollSlideLeftToRight>
+
 
       {/* ═══════════════════════════════════════════════════════
           REVIEWS
       ═══════════════════════════════════════════════════════ */}
-      <ScrollSlideRightToLeft>
-        <section className="py-16">
-          <div className="max-w-7xl mx-auto px-4">
+      <ScrollSlideBottomToTop>
+        <section className="py-16 flex justify-center">
+          <div className="max-w-7xl">
             <SectionContent
               eyebrow="Collector Feedback"
               heading="Verified Collector Reviews"
@@ -215,7 +225,7 @@ export default async function HomePage() {
             </SectionContent>
           </div>
         </section>
-      </ScrollSlideRightToLeft>
+      </ScrollSlideBottomToTop>
 
       {/* ═══════════════════════════════════════════════════════
           PROCESS

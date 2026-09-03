@@ -83,7 +83,8 @@ export default function HeroSequence() {
     const ctx = canvas.getContext('2d');
     const img = imagesRef.current[index - 1];
 
-    if (ctx && img && img.complete) {
+    // Check complete state AND verify naturalWidth is non-zero (non-broken)
+    if (ctx && img && img.complete && img.naturalWidth > 0) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     }

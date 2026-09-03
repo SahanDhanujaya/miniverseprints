@@ -10,8 +10,8 @@ export default function Header() {
 
   // Mapped to Gallery focus instead of Store
   const navLinks = [
-    { href: '#gallery', label: 'Gallery' },
-    { href: `${WHATSAPP_LINK}?text=Hi, I would like to place a custom order.`, label: 'Custom Order' },
+    { href: '/collection', label: 'Collection' },
+    { href: '/custom-order', label: 'Custom Order' },
     { href: '/reviews', label: 'Reviews' },
     { href: '/contact', label: 'Contact' },
   ];
@@ -47,19 +47,9 @@ export default function Header() {
           {/* Right Section: Actions */}
           <div className="hidden lg:flex items-center gap-6">
 
-            {/* Commission CTA button */}
-            <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
-              <button className="flex items-center gap-2 h-9 px-5 bg-zinc-100 hover:bg-white text-black font-semibold rounded-full text-[13px] transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer">
-                <MessageCircle className="w-[15px] h-[15px]" />
-                Enquire
-              </button>
-            </a>
-
+           
             {/* Sleek Line Icons */}
             <div className="flex items-center gap-5 border-l border-white/10 pl-5">
-              <Link href="/search" className="text-zinc-400 hover:text-white transition-colors">
-                <Search className="w-5 h-5 flex-shrink-0" />
-              </Link>
               {/* WhatsApp Link representing Global/Contact */}
               <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors">
                 <Globe className="w-5 h-5 flex-shrink-0" />
