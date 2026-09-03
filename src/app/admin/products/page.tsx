@@ -28,7 +28,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Products</h1>
-        <Link href="/admin/products/new" className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-xl font-medium hover:bg-accent-hover transition-colors">
+        <Link href="/admin/products/new" className="flex items-center gap-2 px-4 py-2 bg-accent text-black font-semibold rounded-xl font-medium hover:bg-accent-hover transition-colors">
           <Plus className="w-4 h-4" /> Add Product
         </Link>
       </div>

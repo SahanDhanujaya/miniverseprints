@@ -94,7 +94,7 @@ export interface Product {
   review_count?: number;
 }
 
-export interface ProductImage {
+export interface  ProductImage {
   id: string;
   product_id: string;
   url: string;

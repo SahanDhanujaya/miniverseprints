@@ -7,7 +7,7 @@ import { MessageCircle, Box, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '@/types';
 import { getProductEnquiryLink } from '@/lib/utils';
 import ModelViewerModal from '@/components/3d/ModelViewerModal';
-import { resolveProductModelUrl } from '@/lib/product-preview';
+import { resolveProductModelUrl, hasSupabasePreview, hasSupabaseModel } from '@/lib/product-preview';
 
 interface ProductCarouselProps {
   products: Product[];
@@ -21,20 +21,39 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
   
   const isHovered = useRef(false);
 
+  // Show any product that has a primary image available (Supabase or local).
+  // The 3D button remains gated to Supabase-hosted models via `hasSupabaseModel`.
+  const hasPrimaryImage = (p: Product) => {
+    const imageUrlFromField = (p as any).image_url || null;
+    const productImages = (p as any).images?.length ? (p as any).images : (p as any).product_images || [];
+    const mainImage = productImages.find((img: any) => img.is_main) || productImages[0] || null;
+    const imageUrl = imageUrlFromField || (mainImage ? (mainImage.url || null) : null);
+    return Boolean(imageUrl);
+  };
+
+  const visibleProducts = products.filter((p) => hasPrimaryImage(p));
+
+  useEffect(() => {
+    // Debug: log incoming products and how many are visible
+    // (browser console)
+    // eslint-disable-next-line no-console
+    console.log('PerspectiveCarousel: products', products?.length, 'visible', visibleProducts.length);
+  }, [products, visibleProducts.length]);
+
   // Auto-play the carousel every 3.5 seconds unless hovered or modal is open
   useEffect(() => {
-    if (!products.length) return;
+    if (!visibleProducts.length) return;
 
     const interval = setInterval(() => {
       if (!isHovered.current && !isModalOpen) {
-        setActiveIndex((prev) => (prev + 1) % products.length);
+        setActiveIndex((prev) => (prev + 1) % visibleProducts.length);
       }
     }, 3500);
 
     return () => clearInterval(interval);
-  }, [products.length, isModalOpen]);
+  }, [visibleProducts.length, isModalOpen]);
 
-  if (!products || products.length === 0) {
+  if (!visibleProducts || visibleProducts.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-zinc-500 text-sm">No products found in gallery.</p>
@@ -42,14 +61,21 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
     );
   }
 
-  const activeProduct = products[activeIndex];
+  // Ensure activeIndex is reset if filtered list is shorter
+  useEffect(() => {
+    if (activeIndex >= visibleProducts.length) {
+      setActiveIndex(0);
+    }
+  }, [visibleProducts.length, activeIndex]);
+
+  const activeProduct = visibleProducts[activeIndex];
 
   const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % products.length);
+    setActiveIndex((prev) => (prev + 1) % visibleProducts.length);
   };
 
   const handlePrev = () => {
-    setActiveIndex((prev) => (prev - 1 + products.length) % products.length);
+    setActiveIndex((prev) => (prev - 1 + visibleProducts.length) % visibleProducts.length);
   };
 
   const handleOpen3D = (e: React.MouseEvent, product: Product) => {
@@ -82,16 +108,17 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
 
         {/* 3D Perspective Deck Area */}
         <div className="relative w-full max-w-5xl h-[420px] md:h-[480px] flex items-center justify-center [perspective:1200px]">
-          {products.map((product, index) => {
+          {visibleProducts.map((product, index) => {
             const offset = index - activeIndex;
             const isActive = offset === 0;
             const modelUrl = resolveProductModelUrl(product);
             const hasModel = Boolean(modelUrl);
 
+            // Prefer explicit `image_url` field (Supabase bucket URL) across the project
+            const imageUrlFromField = product.image_url || null;
             const productImages = product.images?.length ? product.images : product.product_images || [];
-            const fallbackMainImage = product.image_url ? { id: 'fallback-image', product_id: product.id, url: product.image_url, alt_text: product.name, sort_order: 0, is_main: true, created_at: new Date().toISOString() } : null;
-            const mainImage = productImages.find((img) => img.is_main) || productImages[0] || fallbackMainImage;
-            const imageUrl = mainImage ? (mainImage.url || mainImage.url) : '/placeholder.jpg';
+            const mainImage = productImages.find((img) => img.is_main) || productImages[0] || null;
+            const imageUrl = imageUrlFromField || (mainImage ? (mainImage.url || null) : null) || '/placeholder.jpg';
 
             return (
               <motion.div
@@ -125,7 +152,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
 
                   {/* Interactive Hover CTA to View in 3D */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] z-20 p-4 gap-3">
-                    {hasModel ? (
+                    {hasSupabaseModel(product) ? (
                       <button
                         onClick={(e) => handleOpen3D(e, product)}
                         className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/30 bg-black/80 text-white font-medium text-xs backdrop-blur-xl shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:bg-white hover:text-black transition-all cursor-pointer"
@@ -154,7 +181,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
             <ChevronLeft className="w-5 h-5" />
           </button>
           <span className="text-xs font-mono tracking-widest text-zinc-400">
-            0{activeIndex + 1} / 0{products.length}
+            0{activeIndex + 1} / 0{visibleProducts.length}
           </span>
           <button
             onClick={handleNext}

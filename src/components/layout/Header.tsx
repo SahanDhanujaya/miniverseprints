@@ -11,7 +11,7 @@ export default function Header() {
   // Mapped to Gallery focus instead of Store
   const navLinks = [
     { href: '#gallery', label: 'Gallery' },
-    { href: '/custom-order', label: 'Custom Order' },
+    { href: `${WHATSAPP_LINK}?text=Hi, I would like to place a custom order.`, label: 'Custom Order' },
     { href: '/reviews', label: 'Reviews' },
     { href: '/contact', label: 'Contact' },
   ];
@@ -20,7 +20,7 @@ export default function Header() {
     <header className="sticky top-0 z-40 backdrop-blur-2xl bg-black/60 border-b border-white/[0.06] shadow-[0_1px_0_rgba(255,255,255,0.04),0_4px_24px_rgba(0,0,0,0.6)] transition-all" style={{ WebkitBackdropFilter: 'blur(24px)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex items-center h-[72px]">
-          
+
           {/* Left Section: Logo & Nav */}
           <div className="flex items-center gap-12 flex-1">
             {/* Logo */}
@@ -46,7 +46,7 @@ export default function Header() {
 
           {/* Right Section: Actions */}
           <div className="hidden lg:flex items-center gap-6">
-            
+
             {/* Commission CTA button */}
             <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
               <button className="flex items-center gap-2 h-9 px-5 bg-zinc-100 hover:bg-white text-black font-semibold rounded-full text-[13px] transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer">
@@ -54,7 +54,7 @@ export default function Header() {
                 Enquire
               </button>
             </a>
-            
+
             {/* Sleek Line Icons */}
             <div className="flex items-center gap-5 border-l border-white/10 pl-5">
               <Link href="/search" className="text-zinc-400 hover:text-white transition-colors">
