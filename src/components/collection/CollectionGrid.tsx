@@ -25,7 +25,7 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === 'all' ||
-      product.category_id === selectedCategory ||
+      product.categories?.find((category) => category.slug === selectedCategory) ||
       (product as any).category?.slug === selectedCategory;
 
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
