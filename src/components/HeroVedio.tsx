@@ -24,7 +24,7 @@ const glassStyle = (brightness = 1): React.CSSProperties => ({
 export default function HeroVedio() {
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
-
+ 
   useEffect(() => {
     // Set video playback speed (0.5 = 50% speed, 0.75 = 75% speed)
     const SPEED = 0.5;
