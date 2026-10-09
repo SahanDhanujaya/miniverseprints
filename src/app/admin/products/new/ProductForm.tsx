@@ -120,7 +120,7 @@ export default function ProductForm({ categories, tags, product }: ProductFormPr
                 <div className="text-xs text-foreground-muted">Current preview: {product.image_url}</div>
               )}
             </div>
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium mb-1">3D Model (.glb)</label>
               <MediaUploader
                 bucketPath="models"
@@ -132,7 +132,7 @@ export default function ProductForm({ categories, tags, product }: ProductFormPr
               {product?.model_url && (
                 <div className="text-xs text-foreground-muted">Current preview: {product.model_url}</div>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
 

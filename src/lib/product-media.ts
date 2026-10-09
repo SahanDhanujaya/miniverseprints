@@ -5,6 +5,13 @@ export function extractUploadedImageUrls(formData: FormData): string[] {
     .filter((value): value is string => Boolean(value));
 }
 
+export function resolveImageUrlInput(formData: FormData): string | null | undefined {
+  const uploadedUrls = extractUploadedImageUrls(formData);
+  if (uploadedUrls.length > 0) return uploadedUrls[0];
+  return formData.has('image_url') ? null : undefined;
+}
+
 export function pickPrimaryImageUrl(formData: FormData): string | null {
-  return extractUploadedImageUrls(formData)[0] || null;
+  const primary = resolveImageUrlInput(formData);
+  return primary ?? null;
 }

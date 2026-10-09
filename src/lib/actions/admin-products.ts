@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { productSchema } from '@/lib/validations/product';
 import { slugify } from '@/lib/utils';
 import { canAccessAdmin } from '@/lib/permissions';
+import { resolveImageUrlInput } from '@/lib/product-media';
 
 export async function adminCreateProduct(formData: FormData) {
   const supabase = await createClient();
@@ -13,6 +14,9 @@ export async function adminCreateProduct(formData: FormData) {
 
   // Check admin via user metadata
   if (!canAccessAdmin(user)) return { error: 'Unauthorized.' };
+
+  const imageUrlValue = resolveImageUrlInput(formData);
+  const modelUrlValue = formData.has('model_url') ? ((formData.get('model_url') as string | null)?.trim() || null) : undefined;
 
   const raw = {
     name: formData.get('name') as string,
@@ -27,8 +31,8 @@ export async function adminCreateProduct(formData: FormData) {
     product_type: formData.get('product_type') as string || 'ready_stock',
     production_lead_time_days: parseInt(formData.get('production_lead_time_days') as string) || undefined,
     material: formData.get('material') as string || undefined,
-    image_url: (formData.get('image_url') as string | null)?.trim() || null,
-    model_url: (formData.get('model_url') as string | null)?.trim() || null,
+    image_url: imageUrlValue,
+    model_url: modelUrlValue,
     is_featured: formData.get('is_featured') === 'on',
     is_new_arrival: formData.get('is_new_arrival') === 'on',
     is_best_seller: formData.get('is_best_seller') === 'on',
@@ -38,11 +42,15 @@ export async function adminCreateProduct(formData: FormData) {
   const parsed = productSchema.safeParse(raw);
   if (!parsed.success) return { error: parsed.error.issues[0].message };
 
+  const productInsertPayload = { ...parsed.data };
+  if (typeof raw.image_url === 'undefined') delete productInsertPayload.image_url;
+  if (typeof raw.model_url === 'undefined') delete productInsertPayload.model_url;
+
   // Use admin client for writes to bypass RLS for server-side admin actions
   const admin = createAdminClient();
   const { data: product, error } = await admin
     .from('products')
-    .insert(parsed.data)
+    .insert(productInsertPayload)
     .select('id')
     .single();
 
@@ -99,6 +107,9 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
 
   if (!canAccessAdmin(user)) return { error: 'Unauthorized.' };
 
+  const imageUrlValue = resolveImageUrlInput(formData);
+  const modelUrlValue = formData.has('model_url') ? ((formData.get('model_url') as string | null)?.trim() || null) : undefined;
+
   const raw = {
     name: formData.get('name') as string,
     slug: (formData.get('slug') as string) || slugify(formData.get('name') as string),
@@ -112,8 +123,8 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
     product_type: formData.get('product_type') as string || 'ready_stock',
     production_lead_time_days: parseInt(formData.get('production_lead_time_days') as string) || undefined,
     material: formData.get('material') as string || undefined,
-    image_url: (formData.get('image_url') as string | null)?.trim() || null,
-    model_url: (formData.get('model_url') as string | null)?.trim() || null,
+    image_url: imageUrlValue,
+    model_url: modelUrlValue,
     is_featured: formData.get('is_featured') === 'on',
     is_new_arrival: formData.get('is_new_arrival') === 'on',
     is_best_seller: formData.get('is_best_seller') === 'on',
@@ -123,8 +134,12 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
   const parsed = productSchema.safeParse(raw);
   if (!parsed.success) return { error: parsed.error.issues[0].message };
 
+  const updatePayload = { ...parsed.data };
+  if (typeof raw.image_url === 'undefined') delete updatePayload.image_url;
+  if (typeof raw.model_url === 'undefined') delete updatePayload.model_url;
+
   const admin = createAdminClient();
-  const { error } = await admin.from('products').update(parsed.data).eq('id', id);
+  const { error } = await admin.from('products').update(updatePayload).eq('id', id);
   if (error) return { error: error.message };
 
   // Update categories

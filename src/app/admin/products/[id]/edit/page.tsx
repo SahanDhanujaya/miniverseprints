@@ -17,6 +17,10 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     .eq('id', id)
     .single();
 
+    if (product) {
+      console.log(product);
+    }
+
   if (!product) notFound();
 
   const { data: categories } = await supabase.from('categories').select('id, name').eq('is_active', true).order('name');

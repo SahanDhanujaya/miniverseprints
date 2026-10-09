@@ -150,7 +150,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
 
                   
 
-                  {/* Interactive Hover CTA to View in 3D */}
+                  {/* Interactive Hover CTA to View in 3D
                   <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] z-20 p-4 gap-3">
                     {hasSupabaseModel(product) ? (
                       <button
@@ -164,7 +164,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
                         <Box className="w-4 h-4" /> No Preview
                       </div>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </motion.div>
             );

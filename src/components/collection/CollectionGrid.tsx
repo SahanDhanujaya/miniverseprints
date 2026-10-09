@@ -132,12 +132,12 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
 
                   {/* 3D Model Modal Trigger CTA */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] z-20 p-4">
-                    <button
+                    {/* <button
                       onClick={(e) => handleOpen3D(e, product)}
                       className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/30 bg-black/80 text-white font-medium text-xs backdrop-blur-xl shadow-lg hover:bg-white hover:text-black transition-all cursor-pointer"
                     >
                       <Box className="w-4 h-4" /> View Interactive 3D
-                    </button>
+                    </button> */}
                   </div>
                 </div>
 
