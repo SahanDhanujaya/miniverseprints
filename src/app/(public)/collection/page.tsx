@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { hasSupabaseConfig } from '@/lib/supabase/config';
 import { demoCategories, demoProducts } from '@/lib/demo-store';
 import { Product, Category } from '@/types';
@@ -16,17 +16,18 @@ async function getCollectionData() {
   if (!hasSupabaseConfig()) {
     return {
       products: demoProducts as Product[],
-      categories: demoCategories as Category[],
+      categories: demoCategories.filter((category) => category.slug !== '3d-wall-frames') as Category[],
     };
   }
 
-  // Fetch all active products and categories via Supabase admin client
-  const supabase = createAdminClient();
+  // Public storefront reads should use the publishable/anon client so local
+  // development works without exposing or requiring a service-role key.
+  const supabase = await createClient();
 
   const [productsRes, categoriesRes] = await Promise.all([
     supabase
       .from('products')
-      .select('*, product_images(*), category:categories(*)')
+      .select('*, product_images(*), product_categories(categories(*))')
       .eq('is_active', true)
       .order('created_at', { ascending: false }),
     supabase
@@ -36,9 +37,16 @@ async function getCollectionData() {
       .order('sort_order'),
   ]);
 
+  const products = (productsRes.data || []) as Product[];
+  const categories = (categoriesRes.data || []) as Category[];
+  const collectionProducts = products.filter((product) => {
+    const categoryLinks = (product as Product & { product_categories?: Array<{ categories?: Category | null }> }).product_categories || [];
+    return !categoryLinks.some((link) => link.categories?.slug === '3d-wall-frames');
+  });
+
   return {
-    products: (productsRes.data || []) as Product[],
-    categories: (categoriesRes.data || []) as Category[],
+    products: collectionProducts,
+    categories: categories.filter((category) => category.slug !== '3d-wall-frames'),
   };
 }
 
@@ -46,7 +54,7 @@ export default async function CollectionPage() {
   const { products, categories } = await getCollectionData();
 
   return (
-    <main className="min-h-screen bg-black text-white pt-2 pb-20 px-4 md:px-8">
+    <main className="min-h-screen bg-transparent text-white pt-2 pb-20 px-4 md:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
         <Breadcrumb items={[{ label: 'Full Collection' }]} />
 

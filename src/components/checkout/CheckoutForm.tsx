@@ -7,7 +7,7 @@ import Select from '@/components/ui/Select';
 import Button from '@/components/ui/Button';
 import { SRI_LANKA_PROVINCES, SRI_LANKA_DISTRICTS, PAYMENT_METHODS } from '@/lib/constants';
 import { formatPrice, getEffectivePrice } from '@/lib/utils';
-import { CreditCard, Truck, Building2, Store } from 'lucide-react';
+import { CreditCard, Truck, Building2 } from 'lucide-react';
 
 interface CheckoutFormProps {
   profile: Record<string, unknown> | null;
@@ -95,7 +95,6 @@ export default function CheckoutForm({ profile, shippingZones, cart }: CheckoutF
                 { value: 'payhere', label: 'PayHere Online Payment', desc: 'Pay securely with card or bank', icon: CreditCard },
                 { value: 'cod', label: 'Cash on Delivery', desc: 'Pay when you receive', icon: Truck },
                 { value: 'bank_transfer', label: 'Direct Bank Transfer', desc: 'Transfer to our bank account', icon: Building2 },
-                { value: 'store_pickup', label: 'Store Pickup', desc: 'Pick up from our store', icon: Store },
               ].map((method) => (
                 <label key={method.value} className="flex items-center gap-3 p-4 rounded-xl border border-border hover:border-accent cursor-pointer transition-colors">
                   <input type="radio" name="payment_method" value={method.value} className="accent-accent" required />

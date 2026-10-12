@@ -26,7 +26,8 @@ npm install
 cp .env.example .env.local
 ```
 
-3. Fill in Supabase and PayHere values in `.env.local`.
+3. Fill in the Supabase anon key and any PayHere values in `.env.local`. The
+   project URL is already set to `https://dpzmfcxyjlnkmnlbjghx.supabase.co`.
 
 4. Run the dev server:
 
@@ -44,6 +45,7 @@ Required:
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
+NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET=miniverse_bucket
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 PAYHERE_MERCHANT_ID=
 PAYHERE_MERCHANT_SECRET=

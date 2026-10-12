@@ -151,7 +151,7 @@ export default function CustomOrderPage() {
             value={formData.paintType}
             onChange={handleInputChange}
             options={[
-              { value: 'unpainted', label: 'Raw Resin / Unpainted' },
+              { value: 'unpainted', label: 'Raw FDM / Unpainted' },
               { value: 'painted', label: 'Full Hand-Painted Finish' },
               { value: 'primer', label: 'Primed Gray Only' },
             ]}

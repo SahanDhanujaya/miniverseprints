@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 
 interface ModalProps {
   isOpen: boolean;
@@ -29,21 +30,22 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || typeof document === 'undefined') return null;
 
   const sizes = {
     sm: 'max-w-sm',
     md: 'max-w-lg',
-    lg: 'max-w-2xl',
+    lg: 'max-w-5xl',
   };
 
-  return (
+  return createPortal(
+    (
     <div
       ref={overlayRef}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in"
       onClick={(e) => e.target === overlayRef.current && onClose()}
     >
-      <div className={cn('w-full bg-background-secondary rounded-2xl border border-border shadow-2xl animate-fade-in', sizes[size])}>
+      <div className={cn('w-full max-h-[calc(100dvh-2rem)] overflow-y-auto bg-background-secondary rounded-2xl border border-border shadow-2xl animate-fade-in', sizes[size])}>
         {title && (
           <div className="flex items-center justify-between p-6 border-b border-border">
             <h2 className="text-lg font-bold">{title}</h2>
@@ -55,5 +57,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
         <div className="p-6">{children}</div>
       </div>
     </div>
+    ),
+    document.body,
   );
 }

@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // ─── Glass typography styling ─────────────────────────────────────────
 const glassStyle = (brightness = 1): React.CSSProperties => ({
@@ -22,52 +23,20 @@ const glassStyle = (brightness = 1): React.CSSProperties => ({
 });
 
 export default function HeroVedio() {
-  const desktopVideoRef = useRef<HTMLVideoElement>(null);
-  const mobileVideoRef = useRef<HTMLVideoElement>(null);
- 
-  useEffect(() => {
-    // Set video playback speed (0.5 = 50% speed, 0.75 = 75% speed)
-    const SPEED = 0.5;
-
-    if (desktopVideoRef.current) {
-      desktopVideoRef.current.playbackRate = SPEED;
-    }
-    if (mobileVideoRef.current) {
-      mobileVideoRef.current.playbackRate = SPEED;
-    }
-  }, []);
-
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Desktop Video Target */}
-      <video
-        ref={desktopVideoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="hidden md:block absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/vedios/hero-desktop.mp4" type="video/mp4" />
-      </video>
-
-      {/* Mobile Video Target */}
-      <video
-        ref={mobileVideoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="block md:hidden absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/vedios/hero-mobile.mp4" type="video/mp4" />
-      </video>
+    <section className="relative h-screen w-full overflow-hidden bg-background">
+      <Image
+        src="/hero-diorama.png"
+        alt="Symbiote eclipse battlefield diorama"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
+      />
 
       {/* Ambient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-black/40 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none [background:linear-gradient(to_top,#111827_0%,rgba(17,24,39,0.92)_18%,rgba(0,0,0,0.16)_62%,rgba(0,0,0,0.34)_100%)]" />
+      <div className="absolute inset-0 pointer-events-none [background:linear-gradient(90deg,rgba(17,24,39,0.46),rgba(17,24,39,0.12)_44%,transparent_78%)]" />
 
       {/* Hero Section Content Overlay */}
       <div className="absolute inset-0 flex flex-col justify-end pb-16 px-8 md:px-16 z-10 pointer-events-none select-none max-w-4xl">

@@ -8,6 +8,7 @@ export const demoCategories: Category[] = [
   { id: 'cat-00000005', name: 'Hotwheel Racks', slug: 'hotwheel-racks', description: 'Display racks for Hot Wheels and die-cast cars', image_url: null, parent_id: null, sort_order: 5, is_active: true, seo_title: null, seo_description: null, created_at: '', updated_at: '' },
   { id: 'cat-00000006', name: 'Keychains', slug: 'keychains', description: 'Compact custom keychains and mini accessories', image_url: null, parent_id: null, sort_order: 6, is_active: true, seo_title: null, seo_description: null, created_at: '', updated_at: '' },
   { id: 'cat-00000007', name: 'Controller Holders', slug: 'controller-holders', description: 'Gaming controller stands and display holders', image_url: null, parent_id: null, sort_order: 7, is_active: true, seo_title: null, seo_description: null, created_at: '', updated_at: '' },
+  { id: 'cat-00000008', name: '3D Wall Frames', slug: '3d-wall-frames', description: 'Decorative 3D-printed wall frames and display art', image_url: null, parent_id: null, sort_order: 8, is_active: true, seo_title: null, seo_description: null, created_at: '', updated_at: '' },
 ];
 
 const productBase = {
@@ -111,6 +112,7 @@ const productCategorySlugs: Record<string, string[]> = {
   'hotwheel-racks': ['hotwheel-card-holder', 'car-stand'],
   keychains: ['anime-keychains', 'customized-qr-codes', 'minatos-kunai', 'key-holder-dragon', 'custom-pet-tags', 'number-plate-keychains'],
   'controller-holders': ['mk1-headset-stand', 'controller-holder', 'skull-controller-holder', 'oni-mask-controller-holder'],
+  '3d-wall-frames': [],
 };
 
 export function getDemoCategoryBySlug(slug: string) {

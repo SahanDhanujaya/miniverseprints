@@ -40,7 +40,7 @@ export default function ScrollFlipSection({
 
       {/* ─── DESKTOP 3D FLIP LAYOUT (≥ 1024px) ─────────────────────────── */}
       <div ref={containerRef} className="hidden lg:block relative h-[220vh] w-full">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center [perspective:1800px] z-10 overflow-hidden">
+        <div className="sticky top-[72px] h-[calc(100dvh-72px)] w-full flex items-center justify-center [perspective:1800px] z-10">
           <motion.div
             style={{ rotateY }}
             className="relative w-full max-w-7xl px-4 [transform-style:preserve-3d]"

@@ -5,6 +5,7 @@ import "./globals.css";
 import JsonLd from '@/components/seo/JsonLd';
 import { buildOrganizationSchema } from '@/lib/seo';
 import Adsense from '@/components/ads/Adsense';
+import PublicFallingStars from '@/components/effects/PublicFallingStars';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -81,6 +82,7 @@ export default function RootLayout({
         <JsonLd data={buildOrganizationSchema()} />
         {/* Google AdSense (renders only if NEXT_PUBLIC_ADSENSE_CLIENT is set) */}
         <Adsense />
+        <PublicFallingStars />
         {children}
       </body>
     </html>

@@ -10,8 +10,9 @@ export function buildOrganizationSchema() {
     url: SITE_URL,
     logo: `${SITE_URL}/images/logo.png`,
     sameAs: [
-      'https://www.facebook.com/miniverseprints',
-      'https://www.instagram.com/miniverseprints',
+      'https://web.facebook.com/people/Miniverseprints/61584163672754/?mibextid=wwXIfr&rdid=rgTYmeg5R5GcK7hk&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F18gdYUw7Da%2F%3Fmibextid%3DwwXIfr%26_rdc%3D1%26_rdr',
+      'https://www.instagram.com/miniverseprints?dlrf=dmFldHZxYjRqOWNw',
+      'https://www.tiktok.com/@miniverseprints?_r=1&_t=ZS-9AUC1rzfbcb',
     ],
   };
 }

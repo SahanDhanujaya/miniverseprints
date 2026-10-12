@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient, createAdminClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { productSchema } from '@/lib/validations/product';
 import { slugify } from '@/lib/utils';
@@ -46,8 +46,9 @@ export async function adminCreateProduct(formData: FormData) {
   if (typeof raw.image_url === 'undefined') delete productInsertPayload.image_url;
   if (typeof raw.model_url === 'undefined') delete productInsertPayload.model_url;
 
-  // Use admin client for writes to bypass RLS for server-side admin actions
-  const admin = createAdminClient();
+  // Reuse the authenticated server client so Supabase receives the admin
+  // session and the RLS admin policies can authorize the write.
+  const admin = supabase;
   const { data: product, error } = await admin
     .from('products')
     .insert(productInsertPayload)
@@ -138,7 +139,7 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
   if (typeof raw.image_url === 'undefined') delete updatePayload.image_url;
   if (typeof raw.model_url === 'undefined') delete updatePayload.model_url;
 
-  const admin = createAdminClient();
+  const admin = supabase;
   const { error } = await admin.from('products').update(updatePayload).eq('id', id);
   if (error) return { error: error.message };
 
@@ -204,7 +205,7 @@ export async function adminDeleteProduct(id: string) {
 
   if (!canAccessAdmin(user)) return { error: 'Unauthorized.' };
 
-  const admin = createAdminClient();
+  const admin = supabase;
   const { error } = await admin.from('products').delete().eq('id', id);
   if (error) return { error: error.message };
 
@@ -219,7 +220,7 @@ export async function adminToggleProductActive(id: string, isActive: boolean) {
 
   if (!canAccessAdmin(user)) return { error: 'Unauthorized.' };
 
-  const admin = createAdminClient();
+  const admin = supabase;
   const { error } = await admin.from('products').update({ is_active: isActive }).eq('id', id);
   if (error) return { error: error.message };
 
