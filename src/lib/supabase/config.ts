@@ -1,10 +1,12 @@
-const FALLBACK_SUPABASE_URL = 'http://127.0.0.1:54321';
+// The linked production project is safe to keep as a URL fallback. The anon
+// key remains environment-only because it is project-specific configuration.
+const FALLBACK_SUPABASE_URL = 'https://dpzmfcxyjlnkmnlbjghx.supabase.co';
 const FALLBACK_SUPABASE_ANON_KEY = 'local-preview-anon-key';
 
 export function hasSupabaseConfig() {
   return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY !== FALLBACK_SUPABASE_ANON_KEY
   );
 }
 

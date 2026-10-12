@@ -1,12 +1,11 @@
 import Breadcrumb from '@/components/ui/Breadcrumb';
 export const metadata = { title: 'FAQ', description: 'Frequently asked questions' };
 const faqs = [
-  { q: 'How long does delivery take?', a: 'Ready-stock items are dispatched within 1-2 days. Made-to-order items take 7-14 days for production, plus delivery time.' },
+  { q: 'How long does delivery take?', a: 'Ready-stock items are dispatched within 1-2 days. Made-to-order items take 4-7 days for production, plus delivery time.' },
   { q: 'Do you deliver island-wide?', a: 'Yes, we deliver across all districts in Sri Lanka. Delivery charges vary by location.' },
   { q: 'Can I customise a figure?', a: 'Yes! Use our Custom Order form to request a personalised figure with your specifications.' },
-  { q: 'What payment methods do you accept?', a: 'We accept PayHere online payments, cash on delivery, bank transfers, and store pickup.' },
-  { q: 'How do I track my order?', a: 'Use our Track Order page with your order number and email address.' },
-  { q: 'Can I return a product?', a: 'Returns are accepted within 7 days for damaged or defective items. Contact us via WhatsApp.' },
+  { q: 'What payment methods do you accept?', a: 'We accept online payments, cash on delivery, bank transfers.' },
+  { q: 'How do I track my order?', a: 'Use the waybill ID we provide so you can track from the Koombiyo delivery site.' },
   { q: 'What materials do you use?', a: 'We use premium PLA+ filament for 3D printing, ensuring durability and fine detail.' },
   { q: 'Do you offer painted figures?', a: 'Yes, most figures are available painted or unpainted. Painted options are hand-finished for maximum detail.' },
 ];

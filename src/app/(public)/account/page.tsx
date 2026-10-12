@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { User, Package, Heart, Star, MapPin, LogOut } from 'lucide-react';
 import { logout } from '@/lib/actions/auth';
+import { KOOMBIYO_TRACKING_URL } from '@/lib/constants';
 
 export const metadata = { title: 'My Account', description: 'Your MiniVersePrints account' };
 
@@ -38,7 +39,7 @@ export default async function AccountPage() {
             { href: '/account/orders', icon: Package, label: 'Orders', desc: 'View your order history' },
             { href: '/account/wishlist', icon: Heart, label: 'Wishlist', desc: 'Your saved products' },
             { href: '/account/reviews', icon: Star, label: 'Reviews', desc: 'Your product reviews' },
-            { href: '/track-order', icon: Package, label: 'Track Order', desc: 'Check order status' },
+            { href: KOOMBIYO_TRACKING_URL, icon: Package, label: 'Track Order', desc: 'Track delivery with Koombiyo' },
           ].map((item) => (
             <Link key={item.href} href={item.href} className="flex items-start gap-4 p-4 bg-background-card rounded-2xl border border-border hover:border-accent/50 transition-colors">
               <item.icon className="w-6 h-6 text-accent mt-1" />

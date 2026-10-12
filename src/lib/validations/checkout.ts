@@ -27,7 +27,7 @@ export const checkoutSchema = z.object({
   province: z.string().min(2, 'Province is required'),
   postal_code: z.string().optional(),
   notes: z.string().optional(),
-  payment_method: z.enum(['payhere', 'cod', 'bank_transfer', 'store_pickup'], {
+  payment_method: z.enum(['payhere', 'cod', 'bank_transfer'], {
     message: 'Please select a payment method',
   }),
   shipping_zone_id: z.string().uuid('Please select a delivery option'),

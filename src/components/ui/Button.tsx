@@ -14,9 +14,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = 'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent/50 disabled:opacity-50 disabled:cursor-not-allowed';
 
     const variants = {
-      primary: 'bg-accent text-white hover:bg-accent-hover active:scale-[0.98]',
+      primary: 'bg-accent text-black hover:bg-accent-hover active:scale-[0.98]',
       secondary: 'bg-background-card text-foreground hover:bg-background-hover border border-border',
-      outline: 'border border-accent text-accent hover:bg-accent hover:text-white',
+      outline: 'border border-accent text-accent hover:bg-accent hover:text-black',
       ghost: 'text-foreground-muted hover:text-foreground hover:bg-background-hover',
       danger: 'bg-error text-white hover:bg-red-600',
     };

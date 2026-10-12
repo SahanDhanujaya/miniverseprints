@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import { SRI_LANKA_PROVINCES, SRI_LANKA_DISTRICTS, PAYMENT_METHODS } from '@/lib/constants';
 import { createOrder } from '@/lib/actions/checkout';
 import CheckoutForm from '@/components/checkout/CheckoutForm';
+import { isStorePickupZone, getShippingPolicy } from '@/lib/shipping-policy';
 
 export const metadata = { title: 'Checkout', description: 'Complete your order' };
 
@@ -34,13 +35,20 @@ export default async function CheckoutPage() {
     .eq('id', user.id)
     .single();
 
+  const deliveryZones = (shippingZones || [])
+    .filter((zone) => !isStorePickupZone(zone.name))
+    .map((zone) => ({
+      ...zone,
+      shipping_rates: [getShippingPolicy(zone.name)],
+    }));
+
   return (
     <div className="max-w-7xl mx-auto px-4 pb-12">
       <Breadcrumb items={[{ label: 'Cart', href: '/cart' }, { label: 'Checkout' }]} />
       <h1 className="text-2xl font-bold mb-8">Checkout</h1>
       <CheckoutForm
         profile={profile}
-        shippingZones={shippingZones || []}
+        shippingZones={deliveryZones}
         cart={cart}
       />
     </div>

@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Box, Search, Filter } from 'lucide-react';
+import { Box, Eye, MessageCircle, Search } from 'lucide-react';
 import { Product, Category } from '@/types';
 import { getProductEnquiryLink } from '@/lib/utils';
 import ModelViewerModal from '@/components/3d/ModelViewerModal';
+import Modal from '@/components/ui/Modal';
 
 interface CollectionGridProps {
   products: Product[];
@@ -20,13 +21,18 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeModelUrl, setActiveModelUrl] = useState<string>('');
   const [activeModelTitle, setActiveModelTitle] = useState<string>('');
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
   // Filter products by search query and category
   const filteredProducts = products.filter((product) => {
-    const matchesCategory =
-      selectedCategory === 'all' ||
-      product.categories?.find((category) => category.slug === selectedCategory) ||
-      (product as any).category?.slug === selectedCategory;
+    const productCategoryLinks = (product as any).product_categories || [];
+    const matchesCategory = selectedCategory === 'all' || productCategoryLinks.some(
+      (link: any) =>
+        link?.categories?.id === selectedCategory ||
+        link?.categories?.slug === selectedCategory ||
+        link?.category?.id === selectedCategory ||
+        link?.category?.slug === selectedCategory,
+    );
 
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -104,7 +110,16 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
             return (
               <div
                 key={product.id}
-                className="group relative bg-zinc-950 rounded-3xl border border-white/10 overflow-hidden hover:border-white/30 transition-all duration-300 flex flex-col"
+                onClick={() => setQuickViewProduct(product)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setQuickViewProduct(product);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                className="group relative bg-zinc-950 rounded-3xl border border-white/10 overflow-hidden hover:border-white/30 transition-all duration-300 flex flex-col cursor-pointer"
               >
                 {/* Artwork Thumbnail Container */}
                 <div className="relative aspect-[4/5] bg-zinc-900 overflow-hidden">
@@ -130,14 +145,17 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
                     )}
                   </div>
 
-                  {/* 3D Model Modal Trigger CTA */}
+                  {/* Quick Preview Trigger */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] z-20 p-4">
-                    {/* <button
-                      onClick={(e) => handleOpen3D(e, product)}
+                    <button
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setQuickViewProduct(product);
+                      }}
                       className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/30 bg-black/80 text-white font-medium text-xs backdrop-blur-xl shadow-lg hover:bg-white hover:text-black transition-all cursor-pointer"
                     >
-                      <Box className="w-4 h-4" /> View Interactive 3D
-                    </button> */}
+                      <Eye className="w-4 h-4" /> Quick Preview
+                    </button>
                   </div>
                 </div>
 
@@ -153,6 +171,7 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
                   </div>
 
                   <a
+                    onClick={(event) => event.stopPropagation()}
                     href={getProductEnquiryLink(
                       product.name,
                       `${process.env.NEXT_PUBLIC_SITE_URL || ''}/collection`
@@ -169,6 +188,60 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
           })}
         </div>
       )}
+
+      <Modal
+        isOpen={Boolean(quickViewProduct)}
+        onClose={() => setQuickViewProduct(null)}
+        size="lg"
+      >
+        {quickViewProduct && (() => {
+          const previewImages = quickViewProduct.images?.length
+            ? quickViewProduct.images
+            : (quickViewProduct as any).product_images || [];
+          const previewImage = previewImages.find((image: any) => image.is_main) || previewImages[0];
+          const previewImageUrl = previewImage?.url || previewImage?.image_url || quickViewProduct.image_url || '/placeholder.jpg';
+          const displayPrice = quickViewProduct.sale_price ?? quickViewProduct.regular_price;
+
+          return (
+            <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
+              <div className="relative h-[min(55vh,520px)] min-h-[260px] w-full overflow-hidden rounded-2xl bg-black/40 border border-white/10">
+                <Image
+                  src={previewImageUrl}
+                  alt={quickViewProduct.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex flex-col justify-center">
+                <p className="text-[11px] uppercase tracking-[0.25em] text-zinc-500 font-mono mb-3">
+                  3D Gallery Piece
+                </p>
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                  {quickViewProduct.name}
+                </h2>
+                <p className="text-2xl font-semibold text-white mb-5">
+                  Rs. {Number(displayPrice).toLocaleString('en-LK')}
+                </p>
+                <p className="text-sm leading-relaxed text-zinc-400 mb-6">
+                  {quickViewProduct.full_description || quickViewProduct.short_description || 'A handcrafted MiniVersePrints collectible made to order.'}
+                </p>
+                <a
+                  href={getProductEnquiryLink(
+                    quickViewProduct.name,
+                    `${process.env.NEXT_PUBLIC_SITE_URL || ''}/collection`,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-black transition-colors hover:bg-zinc-200"
+                >
+                  <MessageCircle className="w-4 h-4" /> Enquire About This Piece
+                </a>
+              </div>
+            </div>
+          );
+        })()}
+      </Modal>
 
       {/* 3D Model Modal */}
       <ModelViewerModal

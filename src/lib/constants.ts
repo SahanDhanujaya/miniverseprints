@@ -6,6 +6,10 @@ export const WHATSAPP_NUMBER = '+94782525156';
 export const WHATSAPP_LINK = `https://wa.me/94782525156`;
 export const GOOGLE_REVIEWS_LINK = 'https://maps.app.goo.gl/1yp6xwX9GK4c7Ap58';
 export const GOOGLE_REVIEW_SEARCH_QUERY = 'MiniVersePrints Sri Lanka';
+export const KOOMBIYO_TRACKING_URL = 'https://koombiyodelivery.lk/';
+export const FACEBOOK_URL = 'https://web.facebook.com/people/Miniverseprints/61584163672754/?mibextid=wwXIfr&rdid=rgTYmeg5R5GcK7hk&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F18gdYUw7Da%2F%3Fmibextid%3DwwXIfr%26_rdc%3D1%26_rdr';
+export const INSTAGRAM_URL = 'https://www.instagram.com/miniverseprints?dlrf=dmFldHZxYjRqOWNw';
+export const TIKTOK_URL = 'https://www.tiktok.com/@miniverseprints?_r=1&_t=ZS-9AUC1rzfbcb';
 export const CURRENCY = 'LKR';
 export const CURRENCY_SYMBOL = 'Rs.';
 
@@ -29,7 +33,6 @@ export const PAYMENT_METHODS = [
   { value: 'payhere', label: 'PayHere Online Payment', description: 'Pay securely with PayHere' },
   { value: 'cod', label: 'Cash on Delivery', description: 'Pay when you receive your order' },
   { value: 'bank_transfer', label: 'Direct Bank Transfer', description: 'Transfer to our bank account' },
-  { value: 'store_pickup', label: 'Store Pickup', description: 'Pick up from our store' },
 ] as const;
 
 export const SRI_LANKA_PROVINCES = [

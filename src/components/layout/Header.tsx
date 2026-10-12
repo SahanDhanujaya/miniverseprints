@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Menu, X, Globe, MessageCircle } from 'lucide-react';
+import { Search, Menu, X, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
-import { WHATSAPP_LINK } from '@/lib/constants';
+import { FACEBOOK_URL, INSTAGRAM_URL, KOOMBIYO_TRACKING_URL, TIKTOK_URL, WHATSAPP_LINK } from '@/lib/constants';
+import SocialIcon from '@/components/ui/SocialIcon';
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -11,6 +12,9 @@ export default function Header() {
   // Mapped to Gallery focus instead of Store
   const navLinks = [
     { href: '/collection', label: 'Collection' },
+    { href: '/gallery', label: 'Gallery' },
+    { href: KOOMBIYO_TRACKING_URL, label: 'Track Order' },
+    { href: '/shop/category/3d-wall-frames', label: '3D Wall Frames' },
     { href: '/custom-order', label: 'Custom Order' },
     { href: '/reviews', label: 'Reviews' },
     { href: '/contact', label: 'Contact' },
@@ -50,9 +54,17 @@ export default function Header() {
            
             {/* Sleek Line Icons */}
             <div className="flex items-center gap-5 border-l border-white/10 pl-5">
-              {/* WhatsApp Link representing Global/Contact */}
-              <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors">
-                <Globe className="w-5 h-5 flex-shrink-0" />
+              <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-zinc-400 hover:text-white transition-colors">
+                <SocialIcon name="facebook" className="w-5 h-5 flex-shrink-0" />
+              </a>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-zinc-400 hover:text-white transition-colors">
+                <SocialIcon name="instagram" className="w-5 h-5 flex-shrink-0" />
+              </a>
+              <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="text-zinc-400 hover:text-white transition-colors">
+                <SocialIcon name="tiktok" className="w-5 h-5 flex-shrink-0" />
+              </a>
+              <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-zinc-400 hover:text-white transition-colors">
+                <MessageCircle className="w-5 h-5 flex-shrink-0" />
               </a>
             </div>
           </div>

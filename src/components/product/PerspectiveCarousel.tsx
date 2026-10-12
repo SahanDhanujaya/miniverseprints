@@ -18,6 +18,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeModelUrl, setActiveModelUrl] = useState<string>('');
   const [activeModelTitle, setActiveModelTitle] = useState<string>('');
+  const [viewportWidth, setViewportWidth] = useState(1280);
   
   const isHovered = useRef(false);
 
@@ -32,6 +33,16 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
   };
 
   const visibleProducts = products.filter((p) => hasPrimaryImage(p));
+
+  useEffect(() => {
+    const updateViewportWidth = () => setViewportWidth(window.innerWidth);
+    updateViewportWidth();
+    window.addEventListener('resize', updateViewportWidth);
+    return () => window.removeEventListener('resize', updateViewportWidth);
+  }, []);
+
+  // Keep the deck centred while giving side cards enough room at every breakpoint.
+  const cardOffset = Math.min(180, Math.max(92, viewportWidth * 0.14));
 
   useEffect(() => {
     // Debug: log incoming products and how many are visible
@@ -94,7 +105,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
   return (
     <>
       <div
-        className="relative w-full py-6 flex flex-col items-center justify-center overflow-hidden select-none"
+        className="relative w-full min-w-0 py-6 flex flex-col items-center justify-center overflow-x-hidden select-none"
         onMouseEnter={() => {
           isHovered.current = true;
         }}
@@ -103,11 +114,11 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
         }}
       >
         {/* Left & Right Edge Fades */}
-        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 z-20 bg-gradient-to-r from-black via-black/30 to-transparent" />
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 z-20 bg-gradient-to-l from-black via-black/30 to-transparent" />
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 z-20 bg-gradient-to-r from-background via-background/30 to-transparent" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 z-20 bg-gradient-to-l from-background via-background/30 to-transparent" />
 
         {/* 3D Perspective Deck Area */}
-        <div className="relative w-full max-w-5xl h-[420px] md:h-[480px] flex items-center justify-center [perspective:1200px]">
+        <div className="relative mx-auto w-full max-w-5xl h-[360px] sm:h-[420px] md:h-[clamp(360px,42dvh,480px)] flex items-center justify-center overflow-visible [perspective:1200px]">
           {visibleProducts.map((product, index) => {
             const offset = index - activeIndex;
             const isActive = offset === 0;
@@ -124,9 +135,9 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
               <motion.div
                 key={`${product.id}-${index}`}
                 onClick={() => setActiveIndex(index)}
-                className="absolute w-60 h-80 md:w-64 md:h-96 rounded-[20px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] cursor-pointer border border-white/15 bg-zinc-900 group"
+                className="absolute w-44 h-60 sm:w-52 sm:h-72 md:w-60 md:h-80 lg:w-64 lg:h-96 rounded-[20px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] cursor-pointer border border-white/15 bg-zinc-900 group"
                 animate={{
-                  x: offset * 180,
+                  x: offset * cardOffset,
                   z: -Math.abs(offset) * 130,
                   rotateY: offset * -25,
                   scale: isActive ? 1.05 : 0.85,
@@ -141,7 +152,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
                     src={imageUrl}
                     alt={product.name}
                     fill
-                    sizes="280px"
+                    sizes="(max-width: 640px) 176px, (max-width: 768px) 208px, 256px"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     draggable={false}
                   />

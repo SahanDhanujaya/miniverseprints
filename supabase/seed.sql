@@ -11,7 +11,8 @@ INSERT INTO public.categories (id, name, slug, description, sort_order, is_activ
   ('10000000-0000-0000-0000-000000000004', 'Valentine Gifts', 'valentine-gifts', 'Gift-ready custom figures and keepsakes', 4, true),
   ('10000000-0000-0000-0000-000000000005', 'Hotwheel Racks', 'hotwheel-racks', 'Display racks for Hot Wheels and die-cast cars', 5, true),
   ('10000000-0000-0000-0000-000000000006', 'Keychains', 'keychains', 'Compact custom keychains and mini accessories', 6, true),
-  ('10000000-0000-0000-0000-000000000007', 'Controller Holders', 'controller-holders', 'Gaming controller stands and display holders', 7, true);
+  ('10000000-0000-0000-0000-000000000007', 'Controller Holders', 'controller-holders', 'Gaming controller stands and display holders', 7, true),
+  ('10000000-0000-0000-0000-000000000008', '3D Wall Frames', '3d-wall-frames', 'Decorative 3D-printed wall frames and display art', 8, true);
 
 -- ============================================
 -- TAGS
@@ -292,17 +293,15 @@ INSERT INTO public.product_attributes (product_id, name, value) VALUES
 INSERT INTO public.shipping_zones (id, name, districts, is_active) VALUES
   ('60000000-0000-0000-0000-000000000001', 'Colombo District', ARRAY['Colombo'], true),
   ('60000000-0000-0000-0000-000000000002', 'Western Province (excl. Colombo)', ARRAY['Gampaha', 'Kalutara'], true),
-  ('60000000-0000-0000-0000-000000000003', 'Other Sri Lankan Districts', ARRAY['Kandy', 'Matale', 'Nuwara Eliya', 'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar', 'Mullaitivu', 'Vavuniya', 'Trincomalee', 'Batticaloa', 'Ampara', 'Kurunegala', 'Puttalam', 'Anuradhapura', 'Polonnaruwa', 'Badulla', 'Monaragala', 'Ratnapura', 'Kegalle'], true),
-  ('60000000-0000-0000-0000-000000000004', 'Store Pickup', ARRAY['Store Pickup'], true);
+  ('60000000-0000-0000-0000-000000000003', 'Other Sri Lankan Districts', ARRAY['Kandy', 'Matale', 'Nuwara Eliya', 'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar', 'Mullaitivu', 'Vavuniya', 'Trincomalee', 'Batticaloa', 'Ampara', 'Kurunegala', 'Puttalam', 'Anuradhapura', 'Polonnaruwa', 'Badulla', 'Monaragala', 'Ratnapura', 'Kegalle'], true);
 
 -- ============================================
 -- SHIPPING RATES
 -- ============================================
 INSERT INTO public.shipping_rates (zone_id, rate_type, base_rate, per_kg_rate, free_delivery_threshold, estimated_days_min, estimated_days_max) VALUES
-  ('60000000-0000-0000-0000-000000000001', 'flat', 350.00, 50.00, 5000.00, 1, 2),
-  ('60000000-0000-0000-0000-000000000002', 'flat', 450.00, 60.00, 7500.00, 2, 3),
-  ('60000000-0000-0000-0000-000000000003', 'weight_based', 550.00, 80.00, 10000.00, 3, 5),
-  ('60000000-0000-0000-0000-000000000004', 'free', 0.00, NULL, NULL, 0, 0);
+  ('60000000-0000-0000-0000-000000000001', 'flat', 450.00, NULL, NULL, 3, 5),
+  ('60000000-0000-0000-0000-000000000002', 'flat', 450.00, NULL, NULL, 3, 5),
+  ('60000000-0000-0000-0000-000000000003', 'flat', 500.00, NULL, NULL, 3, 5);
 
 -- ============================================
 -- SITE SETTINGS

@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/ui/Breadcrumb';
 import Button from '@/components/ui/Button';
 import { formatPrice, getOrderStatusLabel } from '@/lib/utils';
 import { CheckCircle, Package, Building2, Truck } from 'lucide-react';
+import { KOOMBIYO_TRACKING_URL } from '@/lib/constants';
 
 export const metadata = { title: 'Order Confirmed', description: 'Your order has been placed' };
 
@@ -66,7 +67,7 @@ export default async function ConfirmationPage({ params }: { params: Promise<{ o
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link href="/account/orders"><Button>View Orders</Button></Link>
-        <Link href="/track-order"><Button variant="outline"><Package className="w-5 h-5" /> Track Order</Button></Link>
+        <Link href={KOOMBIYO_TRACKING_URL}><Button variant="outline"><Package className="w-5 h-5" /> Track Order</Button></Link>
         <Link href="/shop"><Button variant="ghost">Continue Shopping</Button></Link>
       </div>
     </div>

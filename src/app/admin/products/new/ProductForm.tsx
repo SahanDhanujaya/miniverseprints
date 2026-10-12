@@ -10,9 +10,10 @@ interface ProductFormProps {
   categories: { id: string; name: string }[];
   tags: { id: string; name: string }[];
   product?: any;
+  defaultCategoryId?: string;
 }
 
-export default function ProductForm({ categories, tags, product }: ProductFormProps) {
+export default function ProductForm({ categories, tags, product, defaultCategoryId }: ProductFormProps) {
   const isEdit = !!product;
   const [state, formAction, isPending] = useActionState(async (_prev: any, formData: FormData) => {
     if (isEdit) {
@@ -69,7 +70,7 @@ export default function ProductForm({ categories, tags, product }: ProductFormPr
               <div className="max-h-48 overflow-y-auto space-y-1">
                 {categories.map(cat => (
                   <label key={cat.id} className="flex items-center gap-2 text-sm py-1">
-                    <input type="checkbox" name="categories" value={cat.id} defaultChecked={product?.categories?.some((c: any) => c.category?.id === cat.id)} className="rounded" />
+                    <input type="checkbox" name="categories" value={cat.id} defaultChecked={product?.categories?.some((c: any) => c.category?.id === cat.id) || (!product && defaultCategoryId === cat.id)} className="rounded" />
                     {cat.name}
                   </label>
                 ))}

@@ -1,4 +1,4 @@
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { Video, Send } from "lucide-react";
 import ProductCarousel from "@/components/product/ProductCarousel";
@@ -15,7 +15,6 @@ import {
 } from "@/lib/reviews-data";
 import ScrollFX from "@/components/motion/ScrollFx";
 import Magnetic from "@/components/motion/Magnetic";
-import Cursor from "@/components/motion/Cursor";
 import HeroSequence from "@/components/HeroSequence";
 import SectionContent from "@/components/motion/SectionContent";
 import ScrollSlideX from "@/components/motion/ScrollSlideX";
@@ -45,24 +44,25 @@ async function getHomeData() {
     return getDemoHomeData();
   }
 
-  // Use admin client for public home queries to avoid RLS blocking access to product images set by admins
-  const supabase = createAdminClient();
+  // Public storefront reads should use the publishable/anon client. RLS has
+  // public read policies for active products, images, categories, and banners.
+  const supabase = await createClient();
 
   const [featured, newArrivals, bestSellers, categories, banners, reviews] =
     await Promise.all([
       supabase
         .from("products")
-        .select("*")
+        .select("*, product_images(*), product_attributes(*)")
         .order("created_at", { ascending: false }),
       supabase
         .from("products")
-        .select("*")
+        .select("*, product_images(*), product_attributes(*)")
         .eq("is_new_arrival", true)
         .eq("is_active", true)
         .limit(24),
       supabase
         .from("products")
-        .select("*")
+        .select("*, product_images(*), product_attributes(*)")
         .eq("is_best_seller", true)
         .eq("is_active", true)
         .limit(24),
@@ -212,10 +212,9 @@ export default async function HomePage() {
   ];
 
   return (
-    <div className="relative bg-black overflow-x-clip">
-      {/* Scroll FX progress bar + cursor */}
+    <div className="relative bg-background overflow-x-clip">
+      {/* Scroll FX progress bar */}
       <ScrollFX />
-      <Cursor />
 
       {/* ═══════════════════════════════════════════════════════
           HERO — scroll-scrubbing car frame sequence
@@ -241,7 +240,7 @@ export default async function HomePage() {
                 subtext="Each piece shown here is available to view in 3D, or to enquire about as a one-of-one commission."
               >
                 {featured.length > 0 && (
-                  <div className="-mx-6 md:-mx-10">
+                  <div className="mx-auto w-full min-w-0">
                     <PerspectiveCarousel products={featured} />
                   </div>
                 )}

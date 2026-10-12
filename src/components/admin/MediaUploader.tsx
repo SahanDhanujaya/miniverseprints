@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 
 type Props = {
@@ -15,10 +15,13 @@ export default function MediaUploader({ bucketPath, bucketName = 'miniverse_buck
   const [uploading, setUploading] = useState(false);
   const [urls, setUrls] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
+  const inputId = useId();
 
   async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (!files || files.length === 0) return;
+    setSelectedFileNames(Array.from(files).map((file) => file.name));
     setUploading(true);
     try {
       const supabase = createClient();
@@ -64,7 +67,25 @@ export default function MediaUploader({ bucketPath, bucketName = 'miniverse_buck
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium">Upload ({bucketPath})</label>
-      <input type="file" accept={accept} multiple={multiple} onChange={handleFiles} />
+      <input
+        id={inputId}
+        type="file"
+        accept={accept}
+        multiple={multiple}
+        onChange={handleFiles}
+        className="sr-only"
+      />
+      <label
+        htmlFor={inputId}
+        className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-emerald-400 focus-within:outline-none focus-within:ring-2 focus-within:ring-emerald-300"
+      >
+        Choose File{multiple ? 's' : ''}
+      </label>
+      {selectedFileNames.length > 0 && (
+        <p className="text-sm text-foreground-muted">
+          {selectedFileNames.join(', ')}
+        </p>
+      )}
       {uploading && <div className="text-sm text-foreground-muted">Uploading...</div>}
       {errorMsg && <div className="text-sm text-error">{errorMsg}</div>}
       <div className="flex flex-col gap-1">

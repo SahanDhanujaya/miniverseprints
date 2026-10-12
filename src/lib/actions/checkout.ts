@@ -8,6 +8,7 @@ import { calculateCheckoutTotals, validateReadyStock, type PricingCartItem } fro
 import { buildOrderInsert } from '@/lib/order-creation';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { getShippingPolicy } from '@/lib/shipping-policy';
 
 export async function createOrder(formData: FormData) {
   const supabase = await createClient();
@@ -71,7 +72,17 @@ export async function createOrder(formData: FormData) {
     .eq('zone_id', data.shipping_zone_id)
     .single();
 
-  const totals = calculateCheckoutTotals(pricingItems, shippingRate);
+  const { data: shippingZone } = await supabase
+    .from('shipping_zones')
+    .select('name')
+    .eq('id', data.shipping_zone_id)
+    .single();
+
+  const effectiveShippingRate = shippingZone
+    ? getShippingPolicy(shippingZone.name)
+    : shippingRate;
+
+  const totals = calculateCheckoutTotals(pricingItems, effectiveShippingRate);
 
   // Generate order number
   const { count } = await supabase.from('orders').select('*', { count: 'exact', head: true });

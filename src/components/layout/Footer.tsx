@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Package, Camera, Globe, Phone, Mail, MapPin, ChevronDown } from 'lucide-react';
-import { WHATSAPP_LINK } from '@/lib/constants';
+import { Package, Phone, Mail, MapPin, ChevronDown } from 'lucide-react';
+import { FACEBOOK_URL, INSTAGRAM_URL, KOOMBIYO_TRACKING_URL, TIKTOK_URL, WHATSAPP_LINK } from '@/lib/constants';
+import SocialIcon from '@/components/ui/SocialIcon';
 
 interface AccordionSectionProps {
   title: string;
@@ -55,6 +56,7 @@ function AccordionSection({ title, links }: AccordionSectionProps) {
 export default function Footer() {
   const quickLinks = [
     { href: '/shop', label: 'Shop All' },
+    { href: '/gallery', label: 'Gallery' },
     { href: '/shop/category/action-figures', label: 'Action Figures' },
     { href: '/shop/category/minifigures', label: 'Minifigures' },
     { href: '/shop/category/valentine-gifts', label: 'Valentine Gifts' },
@@ -69,6 +71,7 @@ export default function Footer() {
     { href: '/shop/category/hotwheel-racks', label: 'Hotwheel Racks' },
     { href: '/shop/category/keychains', label: 'Keychains' },
     { href: '/shop/category/controller-holders', label: 'Controller Holders' },
+    { href: '/shop/category/3d-wall-frames', label: '3D Wall Frames' },
   ];
 
   const helpLinks = [
@@ -76,7 +79,7 @@ export default function Footer() {
     { href: '/delivery', label: 'Delivery Information' },
     { href: '/returns', label: 'Returns & Refunds' },
     { href: '/faq', label: 'FAQ' },
-    { href: '/track-order', label: 'Track Order' },
+    { href: KOOMBIYO_TRACKING_URL, label: 'Track Order' },
     { href: '/privacy', label: 'Privacy Policy' },
     { href: '/terms', label: 'Terms & Conditions' },
   ];
@@ -103,22 +106,31 @@ export default function Footer() {
             {/* Social Icons */}
             <div className="flex gap-3">
               <a
-                href="https://instagram.com/miniverseprints"
+                href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
                 className="p-2.5 rounded-xl bg-background-hover text-foreground-muted hover:text-accent transition-colors"
               >
-                <Camera className="w-5 h-5" />
+                <SocialIcon name="instagram" className="w-5 h-5" />
               </a>
               <a
-                href="https://facebook.com/miniverseprints"
+                href={FACEBOOK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
                 className="p-2.5 rounded-xl bg-background-hover text-foreground-muted hover:text-accent transition-colors"
               >
-                <Globe className="w-5 h-5" />
+                <SocialIcon name="facebook" className="w-5 h-5" />
+              </a>
+              <a
+                href={TIKTOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                className="p-2.5 rounded-xl bg-background-hover text-foreground-muted hover:text-accent transition-colors"
+              >
+                <SocialIcon name="tiktok" className="w-5 h-5" />
               </a>
               <a
                 href={WHATSAPP_LINK}

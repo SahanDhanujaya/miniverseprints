@@ -114,7 +114,10 @@ export default function ReviewsShowcase({
               <Button className="magnetic-button" style={{color: 'black'}}>Browse Products</Button>
             </Link>
             <Link href="/custom-order">
-              <Button variant="outline" className="magnetic-button">
+              <Button
+                variant="outline"
+                className="magnetic-button border-emerald-400 text-emerald-300 hover:bg-emerald-400 hover:text-black"
+              >
                 Custom Order
               </Button>
             </Link>
@@ -123,7 +126,9 @@ export default function ReviewsShowcase({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button variant="outline" className="magnetic-button">
+              <Button
+                className="magnetic-button border-emerald-500 bg-emerald-500 text-black hover:bg-emerald-400"
+              >
                 Google Reviews <ExternalLink className="w-4 h-4" />
               </Button>
             </a>

@@ -2,8 +2,8 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import {
-  LayoutDashboard, Package, FolderOpen, Tags, ShoppingCart, Users,
-  Star, Ticket, Truck, Settings, Image, Palette, LogOut, Menu, X,
+  LayoutDashboard, Package, FolderOpen, Tags, ShoppingCart, Users, Frame, Images,
+  Star, Settings, Image, Palette, LogOut, Menu, X,
 } from 'lucide-react';
 import { logout } from '@/lib/actions/auth';
 import { canAccessAdmin } from '@/lib/permissions';
@@ -17,13 +17,12 @@ export const metadata = {
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/products', label: 'Products', icon: Package },
+  { href: '/admin/wall-frames', label: '3D Wall Frames', icon: Frame },
+  { href: '/admin/gallery', label: 'Gallery', icon: Images },
   { href: '/admin/categories', label: 'Categories', icon: FolderOpen },
   { href: '/admin/tags', label: 'Tags', icon: Tags },
   { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
-  { href: '/admin/customers', label: 'Customers', icon: Users },
   { href: '/admin/reviews', label: 'Reviews', icon: Star },
-  { href: '/admin/coupons', label: 'Coupons', icon: Ticket },
-  { href: '/admin/shipping', label: 'Shipping', icon: Truck },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
   { href: '/admin/banners', label: 'Banners', icon: Image },
   { href: '/admin/custom-orders', label: 'Custom Orders', icon: Palette },

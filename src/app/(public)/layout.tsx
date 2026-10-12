@@ -20,8 +20,10 @@ export default function PublicLayout({
   return (
     <>
       <Header />
-      <main className="flex-1">{children}</main>
-      <Footer />
+      <div className="relative z-[2]">
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
       <FloatingWhatsApp />
     </>
   );

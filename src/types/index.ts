@@ -175,7 +175,7 @@ export type OrderStatus =
   | 'cancelled'
   | 'refunded';
 
-export type PaymentMethod = 'payhere' | 'cod' | 'bank_transfer' | 'store_pickup';
+export type PaymentMethod = 'payhere' | 'cod' | 'bank_transfer';
 
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded' | 'verifying';
 
