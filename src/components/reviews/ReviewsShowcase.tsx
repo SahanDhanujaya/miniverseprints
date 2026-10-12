@@ -25,7 +25,7 @@ export default function ReviewsShowcase({
     >
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-7">
         <div>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-sm font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-sm font-medium mb-4 ">
             <Star className="w-4 h-4 fill-current" />
             Customer reviews
           </div>
@@ -111,7 +111,7 @@ export default function ReviewsShowcase({
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link href="/shop">
-              <Button className="magnetic-button">Browse Products</Button>
+              <Button className="magnetic-button" style={{color: 'black'}}>Browse Products</Button>
             </Link>
             <Link href="/custom-order">
               <Button variant="outline" className="magnetic-button">
