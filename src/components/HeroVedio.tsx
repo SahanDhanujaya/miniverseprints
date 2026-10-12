@@ -24,7 +24,7 @@ const glassStyle = (brightness = 1): React.CSSProperties => ({
 
 export default function HeroVedio() {
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-background">
+    <section className="relative min-h-[70vh] h-[72vh] sm:h-screen w-full overflow-hidden bg-background">
       <Image
         src="/hero-diorama.png"
         alt="Symbiote eclipse battlefield diorama"
@@ -39,21 +39,27 @@ export default function HeroVedio() {
       <div className="absolute inset-0 pointer-events-none [background:linear-gradient(90deg,rgba(17,24,39,0.46),rgba(17,24,39,0.12)_44%,transparent_78%)]" />
 
       {/* Hero Section Content Overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end pb-16 px-8 md:px-16 z-10 pointer-events-none select-none max-w-4xl">
-        <div className="mb-6">
+      <div className="absolute inset-0 flex flex-col justify-end pb-8 px-4 sm:pb-16 sm:px-8 md:px-16 z-10 pointer-events-none select-none w-full">
+        <div className="mb-4 sm:mb-6 w-full max-w-[17rem] sm:max-w-[28rem] md:max-w-[40rem] lg:max-w-[48rem]">
           <div
-            className="block font-bold leading-none tracking-tight"
+            className="block w-full font-bold leading-[0.82] tracking-[-0.06em]"
             style={{
-              fontSize: 'clamp(2.8rem, 7vw, 6.5rem)',
+              fontSize: 'clamp(2.4rem, 8vw, 6.5rem)',
+              maxWidth: '100%',
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
               ...glassStyle(0.8),
             }}
           >
             Print Your Ideas
           </div>
           <div
-            className="block font-black leading-none tracking-tighter"
+            className="block w-full font-black leading-[0.8] tracking-[-0.08em]"
             style={{
-              fontSize: 'clamp(3.2rem, 8.5vw, 8rem)',
+              fontSize: 'clamp(2.8rem, 10vw, 8rem)',
+              maxWidth: '100%',
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
               ...glassStyle(1.15),
               filter: `drop-shadow(0 0 55px rgba(255,255,255,0.45)) drop-shadow(0 4px 14px rgba(0,0,0,0.9))`,
             }}
@@ -62,8 +68,8 @@ export default function HeroVedio() {
           </div>
         </div>
 
-        <div className="flex items-end justify-between gap-8 flex-wrap pointer-events-auto">
-          <p className="text-[11px] md:text-[12px] leading-[1.9] tracking-[0.18em] uppercase text-zinc-400 max-w-xs">
+        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8 pointer-events-auto">
+          <p className="text-[9px] sm:text-[11px] md:text-[12px] leading-[1.8] tracking-[0.16em] uppercase text-zinc-400 max-w-[12rem] sm:max-w-xs">
             We transform your concepts into premium 3D-printed miniatures & collectibles — museum-grade detail, hand-painted finish.
           </p>
 
