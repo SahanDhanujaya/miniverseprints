@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import MediaImage from '@/components/ui/MediaImage';
 import { ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 
 interface ProductGalleryProps {
@@ -26,12 +26,13 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
         onClick={() => setZoomed(!zoomed)}
       >
         {selected && (
-          <Image
+          <MediaImage
             src={selected.url}
             alt={selected.alt_text || 'Product image'}
             fill
             className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, 50vw"
+            transformWidth={960}
           />
         )}
         <div className="absolute top-3 right-3 p-2 bg-background/80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
@@ -50,7 +51,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
                 selected?.url === img.url ? 'border-accent' : 'border-border hover:border-foreground-muted'
               }`}
             >
-              <Image src={img.url} alt={img.alt_text || `View ${i + 1}`} width={64} height={64} className="w-full h-full object-contain" />
+              <MediaImage src={img.url} alt={img.alt_text || `View ${i + 1}`} width={64} height={64} transformWidth={128} className="w-full h-full object-contain" />
             </button>
           ))}
         </div>
@@ -60,7 +61,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
       {zoomed && selected && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={() => setZoomed(false)}>
           <div className="relative max-w-4xl max-h-[90vh] w-full h-full">
-            <Image src={selected.url} alt={selected.alt_text || 'Product image'} fill className="object-contain" sizes="90vw" />
+            <MediaImage src={selected.url} alt={selected.alt_text || 'Product image'} fill transformWidth={1600} className="object-contain" sizes="90vw" />
           </div>
           <button className="absolute top-4 right-4 p-2 bg-white/20 rounded-full text-white hover:bg-white/30">✕</button>
         </div>

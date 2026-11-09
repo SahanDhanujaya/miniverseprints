@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, animate } from 'framer-motion';
-import Image from 'next/image';
+import MediaImage from '@/components/ui/MediaImage';
 import { MessageCircle, Box } from 'lucide-react';
 import { Product } from '@/types';
 import { getProductEnquiryLink } from '@/lib/utils';
@@ -44,13 +44,15 @@ function CarouselCard({ product }: { product: Product }) {
             opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
           {mainImage ? (
-            <Image
+            <MediaImage
               src={mainImage.url}
               alt={mainImage.alt_text || product.name}
               fill
               className="object-contain transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               sizes="280px"
               draggable={false}
+              transformWidth={640}
+              loading="lazy"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">

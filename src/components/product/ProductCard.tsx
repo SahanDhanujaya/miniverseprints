@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import MediaImage from '@/components/ui/MediaImage';
 import { MessageCircle, Box, Eye } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import { Product } from '@/types';
@@ -42,12 +42,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.05),transparent_32%),linear-gradient(110deg,transparent_30%,rgba(255,255,255,0.03)_48%,transparent_66%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:animate-shimmer" />
           
           {mainImage ? (
-            <Image
+            <MediaImage
               src={mainImage.url}
               alt={mainImage.alt_text || product.name}
               fill
               className="object-contain transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              transformWidth={640}
+              loading="lazy"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -103,11 +105,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)]">
           <div className="relative h-[min(60vh,640px)] min-h-[320px] overflow-hidden rounded-2xl border border-white/10 bg-black/40 lg:h-[min(66vh,640px)]">
             {mainImage ? (
-              <Image
+              <MediaImage
                 src={mainImage.url}
                 alt={mainImage.alt_text || product.name}
                 fill
                 sizes="(max-width: 768px) 100vw, 55vw"
+                transformWidth={960}
                 className="object-contain"
               />
             ) : (

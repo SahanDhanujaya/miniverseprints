@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
+import MediaImage from '@/components/ui/MediaImage';
 import { Box, Eye, MessageCircle, Search } from 'lucide-react';
 import { Product, Category } from '@/types';
 import { getProductEnquiryLink } from '@/lib/utils';
 import ModelViewerModal from '@/components/3d/ModelViewerModal';
 import Modal from '@/components/ui/Modal';
+import { PLACEHOLDER_IMAGE } from '@/lib/media-url';
 
 interface CollectionGridProps {
   products: Product[];
@@ -22,17 +23,25 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
   const [activeModelUrl, setActiveModelUrl] = useState<string>('');
   const [activeModelTitle, setActiveModelTitle] = useState<string>('');
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const customisedProducts = products.filter((product) =>
+    product.name.trim().toLowerCase().startsWith('customised'),
+  );
 
   // Filter products by search query and category
   const filteredProducts = products.filter((product) => {
     const productCategoryLinks = (product as any).product_categories || [];
-    const matchesCategory = selectedCategory === 'all' || productCategoryLinks.some(
-      (link: any) =>
-        link?.categories?.id === selectedCategory ||
-        link?.categories?.slug === selectedCategory ||
-        link?.category?.id === selectedCategory ||
-        link?.category?.slug === selectedCategory,
-    );
+    const isCustomised = product.name.trim().toLowerCase().startsWith('customised');
+    const matchesCategory = selectedCategory === 'all'
+      ? true
+      : selectedCategory === 'customised'
+        ? isCustomised
+        : productCategoryLinks.some(
+            (link: any) =>
+              link?.categories?.id === selectedCategory ||
+              link?.categories?.slug === selectedCategory ||
+              link?.category?.id === selectedCategory ||
+              link?.category?.slug === selectedCategory,
+          );
 
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -75,6 +84,16 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
           >
             All Works ({products.length})
           </button>
+          <button
+            onClick={() => setSelectedCategory('customised')}
+            className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
+              selectedCategory === 'customised'
+                ? 'bg-white text-black'
+                : 'bg-white/5 text-zinc-400 hover:text-white border border-white/10'
+            }`}
+          >
+            Customised ({customisedProducts.length})
+          </button>
           {categories.map((cat) => (
             <button
               key={cat.id}
@@ -105,7 +124,7 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
               ? product.images
               : (product as any).product_images || [];
             const mainImage = productImages.find((img: any) => img.is_main) || productImages[0];
-            const imageUrl = mainImage ? (mainImage.url || mainImage.image_url) : '/placeholder.jpg';
+            const imageUrl = mainImage ? (mainImage.url || mainImage.image_url) : PLACEHOLDER_IMAGE;
 
             return (
               <div
@@ -123,10 +142,13 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
               >
                 {/* Artwork Thumbnail Container */}
                 <div className="relative aspect-[4/5] bg-zinc-900 overflow-hidden">
-                  <Image
+                  <MediaImage
                     src={imageUrl}
                     alt={product.name}
                     fill
+                    transformWidth={640}
+                    loading="lazy"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1280px) 33vw, 25vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
@@ -199,16 +221,17 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
             ? quickViewProduct.images
             : (quickViewProduct as any).product_images || [];
           const previewImage = previewImages.find((image: any) => image.is_main) || previewImages[0];
-          const previewImageUrl = previewImage?.url || previewImage?.image_url || quickViewProduct.image_url || '/placeholder.jpg';
+          const previewImageUrl = previewImage?.url || previewImage?.image_url || quickViewProduct.image_url || PLACEHOLDER_IMAGE;
           const displayPrice = quickViewProduct.sale_price ?? quickViewProduct.regular_price;
 
           return (
             <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
               <div className="relative h-[min(55vh,520px)] min-h-[260px] w-full overflow-hidden rounded-2xl bg-black/40 border border-white/10">
-                <Image
+                <MediaImage
                   src={previewImageUrl}
                   alt={quickViewProduct.name}
                   fill
+                  transformWidth={960}
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover"
                 />
