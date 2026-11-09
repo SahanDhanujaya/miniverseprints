@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Search, Menu, X, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { FACEBOOK_URL, INSTAGRAM_URL, KOOMBIYO_TRACKING_URL, TIKTOK_URL, WHATSAPP_LINK } from '@/lib/constants';
@@ -30,12 +29,9 @@ export default function Header() {
           <div className="flex items-center gap-12 flex-1">
             {/* Logo */}
             <Link href="/" aria-label="MiniVersePrints home" className="flex items-center">
-              <Image
+              <img
                 src="/images/miniverseprints-logo.jpg"
                 alt="MiniVersePrints"
-                width={180}
-                height={58}
-                priority
                 className="h-[58px] w-[180px] object-contain invert"
               />
             </Link>

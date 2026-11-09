@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Package, Phone, Mail, MapPin, ChevronDown } from 'lucide-react';
+import { Phone, Mail, MapPin, ChevronDown } from 'lucide-react';
 import { FACEBOOK_URL, INSTAGRAM_URL, KOOMBIYO_TRACKING_URL, TIKTOK_URL, WHATSAPP_LINK } from '@/lib/constants';
 import SocialIcon from '@/components/ui/SocialIcon';
 
@@ -93,11 +93,12 @@ export default function Footer() {
           
           {/* Brand Info */}
           <div className="flex flex-col items-start">
-            <Link href="/" className="flex items-center gap-2 mb-3">
-              <Package className="w-6 h-6 text-accent" />
-              <span className="text-lg font-bold tracking-tight">
-                Mini<span className="text-accent">Verse</span>Prints
-              </span>
+            <Link href="/" aria-label="MiniVersePrints home" className="flex items-center mb-3">
+              <img
+                src="/images/miniverseprints-logo.jpg"
+                alt="MiniVersePrints"
+                className="h-[72px] w-[210px] object-contain invert"
+              />
             </Link>
             <p className="text-sm text-foreground-muted mb-6 leading-relaxed max-w-sm">
               Premium 3D-printed figures, busts, miniatures, and collectibles crafted with care in Sri Lanka.
