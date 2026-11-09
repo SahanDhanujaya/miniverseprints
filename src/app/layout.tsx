@@ -61,8 +61,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/images/miniverseprints-logo.png?v=3',
-    shortcut: '/images/miniverseprints-logo.png?v=3',
+    icon: '/favicon.png?v=4',
+    shortcut: '/favicon.png?v=4',
   },
   robots: {
     index: true,
