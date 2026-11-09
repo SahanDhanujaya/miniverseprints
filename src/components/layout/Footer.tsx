@@ -95,7 +95,7 @@ export default function Footer() {
           <div className="flex flex-col items-start">
             <Link href="/" aria-label="MiniVersePrints home" className="flex items-center mb-3">
               <img
-                src="/images/miniverseprints-logo.jpg"
+                src="/images/miniverseprints-logo.png"
                 alt="MiniVersePrints"
                 className="h-[72px] w-[210px] object-contain invert"
               />

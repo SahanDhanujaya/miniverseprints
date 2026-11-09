@@ -30,7 +30,7 @@ export default function Header() {
             {/* Logo */}
             <Link href="/" aria-label="MiniVersePrints home" className="flex items-center">
               <img
-                src="/images/miniverseprints-logo.jpg"
+                src="/images/miniverseprints-logo.png"
                 alt="MiniVersePrints"
                 className="h-[58px] w-[180px] object-contain invert"
               />
