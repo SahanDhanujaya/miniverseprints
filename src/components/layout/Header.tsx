@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, Menu, X, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { FACEBOOK_URL, INSTAGRAM_URL, KOOMBIYO_TRACKING_URL, TIKTOK_URL, WHATSAPP_LINK } from '@/lib/constants';
@@ -28,10 +29,15 @@ export default function Header() {
           {/* Left Section: Logo & Nav */}
           <div className="flex items-center gap-12 flex-1">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
-              <span className="text-[22px] tracking-tight text-white font-bold flex items-center">
-                MiniVerse<span className="text-zinc-400 font-semibold ml-[1px]">Prints</span>
-              </span>
+            <Link href="/" aria-label="MiniVersePrints home" className="flex items-center">
+              <Image
+                src="/images/miniverseprints-logo.jpg"
+                alt="MiniVersePrints"
+                width={180}
+                height={58}
+                priority
+                className="h-[58px] w-[180px] object-contain invert"
+              />
             </Link>
 
             {/* Desktop Nav */}
