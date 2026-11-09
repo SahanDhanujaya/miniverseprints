@@ -23,25 +23,17 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
   const [activeModelUrl, setActiveModelUrl] = useState<string>('');
   const [activeModelTitle, setActiveModelTitle] = useState<string>('');
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-  const customisedProducts = products.filter((product) =>
-    product.name.trim().toLowerCase().startsWith('customised'),
-  );
 
   // Filter products by search query and category
   const filteredProducts = products.filter((product) => {
     const productCategoryLinks = (product as any).product_categories || [];
-    const isCustomised = product.name.trim().toLowerCase().startsWith('customised');
-    const matchesCategory = selectedCategory === 'all'
-      ? true
-      : selectedCategory === 'customised'
-        ? isCustomised
-        : productCategoryLinks.some(
-            (link: any) =>
-              link?.categories?.id === selectedCategory ||
-              link?.categories?.slug === selectedCategory ||
-              link?.category?.id === selectedCategory ||
-              link?.category?.slug === selectedCategory,
-          );
+    const matchesCategory = selectedCategory === 'all' || productCategoryLinks.some(
+      (link: any) =>
+        link?.categories?.id === selectedCategory ||
+        link?.categories?.slug === selectedCategory ||
+        link?.category?.id === selectedCategory ||
+        link?.category?.slug === selectedCategory,
+    );
 
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -83,16 +75,6 @@ export default function CollectionGrid({ products, categories }: CollectionGridP
             }`}
           >
             All Works ({products.length})
-          </button>
-          <button
-            onClick={() => setSelectedCategory('customised')}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
-              selectedCategory === 'customised'
-                ? 'bg-white text-black'
-                : 'bg-white/5 text-zinc-400 hover:text-white border border-white/10'
-            }`}
-          >
-            Customised ({customisedProducts.length})
           </button>
           {categories.map((cat) => (
             <button
