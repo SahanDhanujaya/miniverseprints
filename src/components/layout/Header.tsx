@@ -32,7 +32,7 @@ export default function Header() {
               <img
                 src="/images/miniverseprints-logo.png"
                 alt="MiniVersePrints"
-                className="h-[58px] w-[180px] object-contain invert"
+                className="h-[58px] w-[180px] object-contain"
               />
             </Link>
 

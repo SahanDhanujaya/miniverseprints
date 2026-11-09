@@ -97,7 +97,7 @@ export default function Footer() {
               <img
                 src="/images/miniverseprints-logo.png"
                 alt="MiniVersePrints"
-                className="h-[72px] w-[210px] object-contain invert"
+                className="h-[72px] w-[210px] object-contain"
               />
             </Link>
             <p className="text-sm text-foreground-muted mb-6 leading-relaxed max-w-sm">
