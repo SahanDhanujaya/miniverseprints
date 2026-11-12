@@ -4,7 +4,6 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import JsonLd from '@/components/seo/JsonLd';
 import { buildOrganizationSchema } from '@/lib/seo';
-import Adsense from '@/components/ads/Adsense';
 import PublicFallingStars from '@/components/effects/PublicFallingStars';
 
 const inter = Inter({
@@ -68,6 +67,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  other: {
+    'google-adsense-account': 'ca-pub-4554856508485846',
+  },
 };
 
 export default function RootLayout({
@@ -80,8 +82,6 @@ export default function RootLayout({
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground">
         {/* Organization structured data */}
         <JsonLd data={buildOrganizationSchema()} />
-        {/* Google AdSense ownership and ad-serving script */}
-        <Adsense />
         <PublicFallingStars />
         {children}
       </body>
