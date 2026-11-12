@@ -80,7 +80,7 @@ export default function RootLayout({
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground">
         {/* Organization structured data */}
         <JsonLd data={buildOrganizationSchema()} />
-        {/* Google AdSense (renders only if NEXT_PUBLIC_ADSENSE_CLIENT is set) */}
+        {/* Google AdSense ownership and ad-serving script */}
         <Adsense />
         <PublicFallingStars />
         {children}
